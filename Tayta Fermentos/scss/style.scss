@@ -7,7 +7,7 @@ $white: #fff;
 $black: #000000;
 // $darken: #3a4348;
 
-$primary: #b7472a;
+$primary: #acf0cb;
 $secondary: #01d28e;
 
 
@@ -65,7 +65,8 @@ h1, h2, h3, h4, h5,
 	position: relative;
 	z-index: 0;
 	width: 100%;
-	background: darken($primary,5%);
+	background-color: #01d28e;
+	//background: darken($primary,5%);
 	.phone{
 		z-index: 1;
 		font-weight: 200;
