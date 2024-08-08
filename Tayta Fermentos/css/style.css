@@ -8027,23 +8027,23 @@ h1, h2, h3, h4, h5,
   position: relative;
   z-index: 0;
   width: 100%;
-  background: #D1E231; }
+  background: #fff; }
   .wrap .phone {
     z-index: 1;
-    font-weight: 200; }
+    font-weight: bold; }
     .wrap .phone span {
-      color: rgba(255, 255, 255, 0.6); }
+      color: rgba(40, 167, 69); }
     .wrap .phone a {
-      color: rgba(255, 255, 255, 0.6);
+      color: rgba(40, 167, 69);
       font-size: 12px; }
   @media (max-width: 767.98px) {
     .wrap .reg {
-      width: 50%;
+      width: 70%;
       text-align: right; } }
   .wrap .reg p {
-    font-weight: 200; }
+    font-weight: bold; }
     .wrap .reg p a {
-      color: rgba(255, 255, 255, 0.8);
+      color: rgba(40, 167, 69);
       text-transform: uppercase;
       font-size: 13px; }
 
@@ -8060,7 +8060,7 @@ h1, h2, h3, h4, h5,
       margin-right: 10px; }
       .social-media p a span {
         font-size: 12px;
-        color: #fff; }
+        color: #28a745; }
       .social-media p a:hover {
         background: #b7472a;
         border-color: #b7472a; }
@@ -8567,19 +8567,19 @@ h1, h2, h3, h4, h5,
         color: #fff !important; }
 
 .ftco-intro {
-  background: #D1E231; }
+  background: #28a745; }
   .ftco-intro .intro {
     z-index: 0;
     position: relative; }
 
 .intro {
   width: 100%;
-  background: #b7472a;
+  background: #28a745;
   padding: 30px; }
   .intro.color-1 {
-    background: #ab4227; }
+    background: #28a745; }
   .intro.color-2 {
-    background: #a23f25; }
+    background: #28a745; }
   .intro .icon {
     margin-right: 20px; }
     .intro .icon span {
@@ -9961,3 +9961,53 @@ textarea.form-control {
   100% {
     stroke-dasharray: 89, 200;
     stroke-dashoffset: -136px; } }
+
+    .whatsapp-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 9999;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background-color: #25D366;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      animation: breathe 2s ease-in-out infinite;
+    }
+    
+    /*Estilos solo al icono whatsapp*/
+    .whatsapp-btn i {
+      color: #fff;
+      font-size: 40px;
+      animation: beat 2s ease-in-out infinite;
+      text-decoration: none;
+    }
+    
+    /*Estilos con animation contorno respirando*/
+    @keyframes breathe {
+      0% {
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5);
+      }
+      70% {
+        box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+      }
+    }
+    
+    /*Estilos de animacion del icono latiendo*/
+    @keyframes beat {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.2);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
