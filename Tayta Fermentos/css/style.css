@@ -9652,10 +9652,10 @@ textarea.form-control {
     .dbox p a {
       color: #b7472a; }
   .dbox .icon {
-    width: 100px;
-    height: 100px;
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
-    background: #b7472a;
+    background: #CF5B65;
     margin: 0 auto;
     margin-bottom: 20px; }
     .dbox .icon span {
@@ -9991,4 +9991,42 @@ textarea.form-control {
       height: 65%;
    }
 
+   /*.tipo{
+    font-family: Verdana,sans-serif;
+   }*/
+   .bebas-neue-regular {
+    font-family: "Bebas Neue", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+   body{
+    font-family: "Bebas Neue";
+   }
    
+   .btn {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px; /* Espacio entre el icono y el texto */
+    cursor: pointer;
+  }
+  
+  .facebook {
+    background-color: #3b5998;
+    color: white;
+  }
+  
+  .google {
+    background-color: #db4437;
+    color: white;
+  }
+  
+  .facebook i, .google i {
+    font-size: 20px; /* Tamaño del icono */
+  }
+  
