@@ -1,3 +1,87 @@
+<?php
+session_start();
+include('db.php'); // Conexión a la base de datos
+
+// Inicializar carrito si no existe
+if (!isset($_SESSION['carrito'])) {
+    $_SESSION['carrito'] = [];
+}
+
+// Capturar y validar la información del formulario al enviar la orden
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+	
+    // Datos del cliente
+    $nombres = $_POST['firstname'] ?? '';
+    $apellidos = $_POST['lastname'] ?? '';
+    $email = $_POST['emailaddress'] ?? '';
+    $genero = $_POST['gender'] ?? '';  
+    $dni = $_POST['dni'] ?? '';       
+    $celular = $_POST['phone'] ?? '';
+    $direccion_cliente = $_POST['streetaddress'] ?? '';
+    $codigoDistrito = $_POST['codigoDistrito'] ?? '';
+
+    // Datos del pedido
+    $direccion_envio = $_POST['streetaddress'] ?? ''; 
+    $observacion = $_POST['observacion'] ?? '';
+    $metodo_pago = $_POST['optradio'];
+    $total = $_POST['total']; // Total calculado del carrito
+
+	if ($nombres && $apellidos && $email && $celular && $direccion_cliente && $codigoDistrito) {
+
+		// Guardar el cliente en la tabla cliente
+		$query_cliente = "INSERT INTO cliente (nombre, apellido, email, genero, dni, celular, direccion, codigoDistrito)
+						VALUES ('$nombres', '$apellidos', '$email', '$genero', '$dni', '$celular', '$direccion_cliente', $codigoDistrito)";
+		
+		if ($conn->query($query_cliente)) {
+			// Obtener el ID del cliente recién insertado
+			$codigoCliente = $conn->insert_id;
+
+			// Generar un número de pedido único
+			$numero_pedido = 'PED-' . time();
+
+			// Guardar el pedido en la tabla pedido
+			$query_pedido = "INSERT INTO pedido (numero, fecha, direccion, observacion, codigoCliente, codigoDistrito, transaccionCodigo)
+							VALUES ('$numero_pedido', NOW(), '$direccion_envio', '$observacion', $codigoCliente, $codigoDistrito, $metodo_pago)";
+
+			if ($conn->query($query_pedido)) {
+				// Obtener el ID del pedido recién insertado
+				$codigoPedido = $conn->insert_id;
+
+				// Guardar los detalles del pedido en la tabla detallepedido
+				foreach ($_SESSION['carrito'] as $id_producto => $cantidad) {
+					// Obtener detalles del producto
+					$query_producto = "SELECT titulo, precio FROM producto WHERE codigo = $id_producto";
+					$result_producto = $conn->query($query_producto);
+					if ($result_producto && $row = $result_producto->fetch_assoc()) {
+						$precioUnitario = $row['precio'];
+						$descripcion = $row['titulo'];
+
+						$query_detalle = "INSERT INTO detallepedido (cantidad, precioUnitario, descripcion, pedido_codigo, presentacion_codigo)
+										VALUES ($cantidad, $precioUnitario, '$descripcion', $codigoPedido, $id_producto)";
+						$conn->query($query_detalle);
+					}
+				}
+
+				// Limpiar el carrito después de procesar la orden
+				$_SESSION['carrito'] = [];
+				header('Location: confirm.php'); // Redirigir a una página de confirmación
+				exit;
+			} else {
+				$error = "Hubo un error al procesar su pedido. Por favor, inténtelo de nuevo.";
+			}
+		} else {
+			$error = "Hubo un error al guardar los datos del cliente. Por favor, inténtelo de nuevo.";
+		}
+	} else {
+		$error = "Por favor, complete todos los campos requeridos.";
+	}
+}
+
+// Obtener productos del carrito desde la sesión
+$productos_carrito = $_SESSION['carrito'];
+$total = 0; // Variable para el total del carrito
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -22,271 +106,170 @@
   </head>
   <body>
 
-	<div class="wrap">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-6 d-flex align-items-center">
-					<p class="mb-0 phone pl-md-2">
-						<a href="#" class="mr-2"><span class="fa fa-phone mr-1"></span> 968 204 147</a> 
-						<a href="contact.html"><span class="fa fa-paper-plane mr-1"></span> contacto@taytafermentos.com.pe</a>
-					</p>
-				</div>
-				<div class="col-md-6 d-flex justify-content-md-end">
-					<div class="social-media mr-4">
-						<p class="mb-0 d-flex">
-							<a href="#" class="d-flex align-items-center justify-content-center"><span class="fa fa-facebook"><i class="sr-only">Facebook</i></span></a>
-							<a href="#" class="d-flex align-items-center justify-content-center"><span class="fa fa-twitter"><i class="sr-only">Twitter</i></span></a>
-							<a href="#" class="d-flex align-items-center justify-content-center"><span class="fa fa-instagram"><i class="sr-only">Instagram</i></span></a>
-						</p>
-					</div>
-					<div class="reg">
-						<p class="mb-0"><a href="login.html" ></i>Iniciar sesion</a></p>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-    
-	<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-	    <div class="container">
-	      <a class="navbar-brand" href="index.html"><img src="images/LogoSinFondo.png" width="200" height="80"></a>
-	      	<div class="order-lg-last btn-group">
-				<a href="cart.html" class="btn-cart dropdown-toggle dropdown-toggle-split">
-					<img src="images/carrito_final.png" alt="carrito de compras" style="width: 24px; height: 24px ;">
-					
-				</a>
-          	
-        	</div>
-
-	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-	        <span class="oi oi-menu"></span> Menu
-	      </button>
-
-	      <div class="collapse navbar-collapse" id="ftco-nav">
-	        <ul class="navbar-nav ml-auto">
-	          <li class="nav-item"><a href="about.html" class="nav-link">Nosotros</a></li>
-	          <li class="nav-item dropdown">
-			  <li class="nav-item"><a href="product.html" class="nav-link">Productos</a></li>
-            </li>
-	          <li class="nav-item"><a href="blog.html" class="nav-link">Membresía</a></li> 
-	          <li class="nav-item"><a href="contact.html" class="nav-link">Contacto</a></li>
-			  
-	        </ul>
-	      </div>
-	    </div>
-	</nav>
+  <?php include('header.php'); ?>   
     <!-- END nav -->
     
     
 
     <section class="ftco-section">
-    	<div class="container">
-    		<div class="row justify-content-center">
-          <div class="col-xl-10 ftco-animate">
-						<form action="#" class="billing-form">
-							<h3 class="mb-4 billing-heading">Detalles de Facturación</h3>
-	          	<div class="row align-items-end">
-	          		<div class="col-md-6">
-	                <div class="form-group">
-	                	<label for="firstname">Nombres</label>
-	                  <input type="text" class="form-control" placeholder="">
-	                </div>
-	              </div>
-	              <div class="col-md-6">
-	                <div class="form-group">
-	                	<label for="lastname">Apellidos</label>
-	                  <input type="text" class="form-control" placeholder="">
-	                </div>
-                </div>
-                <div class="w-100"></div>
-		            <div class="col-md-12">
-		            	<div class="form-group">
-		            		<label for="country">País</label>
-		            		<div class="select-wrap">
-		                  <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-		                  <select name="" id="" class="form-control">
-		                  	<option value="">Perú</option>
-		                    <option value="">Italy</option>
-		                    <option value="">Philippines</option>
-		                    <option value="">South Korea</option>
-		                    <option value="">Hongkong</option>
-		                    <option value="">Japan</option>
-		                  </select>
-		                </div>
-		            	</div>
-		            </div>
-		            <div class="w-100"></div>
-		            <div class="col-md-6">
-		            	<div class="form-group">
-	                	<label for="streetaddress">Dirección</label>
-	                  <input type="text" class="form-control" placeholder="House number and street name">
-	                </div>
-		            </div>
-		            <div class="col-md-6">
-		            	<div class="form-group">
-	                  <input type="text" class="form-control" placeholder="Appartment, suite, unit etc: (optional)">
-	                </div>
-		            </div>
-		            <div class="w-100"></div>
-		            <div class="col-md-6">
-		            	<div class="form-group">
-	                	<label for="towncity">Ciudad</label>
-	                  <input type="text" class="form-control" placeholder="">
-	                </div>
-		            </div>
-		            <div class="col-md-6">
-		            	<div class="form-group">
-		            		<label for="postcodezip">Código Postal</label>
-	                  <input type="text" class="form-control" placeholder="">
-	                </div>
-		            </div>
-		            <div class="w-100"></div>
-		            <div class="col-md-6">
-	                <div class="form-group">
-	                	<label for="phone">Celular</label>
-	                  <input type="text" class="form-control" placeholder="">
-	                </div>
-	              </div>
-	              <div class="col-md-6">
-	                <div class="form-group">
-	                	<label for="emailaddress">Correo</label>
-	                  <input type="text" class="form-control" placeholder="">
-	                </div>
-                </div>
-                <div class="w-100"></div>
-                <div class="col-md-12">
-                	<div class="form-group mt-4">
-										<div class="radio">
-										  <label class="mr-3"><input type="radio" name="optradio"> ¿Crear una cuenta? </label>
-										<label><input type="radio" name="optradio"> Enviar a otra dirección?</label>
-										</div>
-									</div>
-                </div>
-	            </div>
-	          </form><!-- END -->
-
-
-
-	          <div class="row mt-5 pt-3 d-flex">
-	          	<div class="col-md-6 d-flex">
-	          		<div class="cart-detail cart-total p-3 p-md-4">
-	          			<h3 class="billing-heading mb-4">Total Compras</h3>
-	          			<p class="d-flex">
-		    						<span>Subtotal</span>
-		    						<span>S/ 20.60</span>
-		    					</p>
-		    					<p class="d-flex">
-		    						<span>Delivery</span>
-		    						<span>S/ 0.00</span>
-		    					</p>
-		    					<p class="d-flex">
-		    						<span>Descuento</span>
-		    						<span>S/ 3.00</span>
-		    					</p>
-		    					<hr>
-		    					<p class="d-flex total-price">
-		    						<span>Total</span>
-		    						<span>S/ 17.60</span>
-		    					</p>
-								</div>
-	          	</div>
-	          	<div class="col-md-6">
-	          		<div class="cart-detail p-3 p-md-4">
-	          			<h3 class="billing-heading mb-4">Método de Pago</h3>
-									<div class="form-group">
-										<div class="col-md-12">
-											<div class="radio">
-											   <label><input type="radio" name="optradio" class="mr-2"> Transferencia</label>
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-md-12">
-											<div class="radio">
-											   <label><input type="radio" name="optradio" class="mr-2"> Tarjeta de Crédito/Débito</label>
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-md-12">
-											<div class="radio">
-											   <label><input type="radio" name="optradio" class="mr-2"> Yape / Plin</label>
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-md-12">
-											<div class="checkbox">
-											   <label><input type="checkbox" value="" class="mr-2"> He leído y acepto los términos y condiciones</label>
-											</div>
-										</div>
-									</div>
-									<p><a href="#"class="btn btn-primary py-3 px-4">Realizar Pedido</a></p>
-								</div>
-	          	</div>
-	          </div>
-          </div> <!-- .col-md-8 -->
-        </div>
-    	</div>
-    </section>
-
-    <footer class="ftco-footer">
 		<div class="container">
-		  <div class="row mb-5">
-			<div class="col-sm-12 col-md">
-			  <div class="ftco-footer-widget mb-4">
-				<h2 class="ftco-heading-2 logo"><a href="#">EMPRESA</span></a></h2>
-				<p>Nutre tu cuerpo, vive mejor. Descubre nuestros productos 100% saludables.</p>
-				<ul class="ftco-footer-social list-unstyled mt-2">
-				  <li class="ftco-animate"><a href="#"><span class="fa fa-twitter"></span></a></li>
-				  <li class="ftco-animate"><a href="#"><span class="fa fa-facebook"></span></a></li>
-				  <li class="ftco-animate"><a href="#"><span class="fa fa-instagram"></span></a></li>
-				</ul>
-			  </div>
-			</div>
-			
-			
-			<div class="col-sm-12 col-md">
-			   <div class="ftco-footer-widget mb-4">
-				<h2 class="ftco-heading-2">Preguntas rápidas </h2>
-				<ul class="list-unstyled">
-				  <li><a href="#"><span class="fa fa-chevron-right mr-2"></span>Preguntas frecuentes</a></li>
-				  <li><a href="#"><span class="fa fa-chevron-right mr-2"></span>Promociones y campañas</a></li>
-				  <li><a href="#"><span class="fa fa-chevron-right mr-2"></span>Política de despacho</a></li>
-				  <li><a href="#"><span class="fa fa-chevron-right mr-2"></span>Política de privacidad</a></li>
-				  <li><a href="#"><span class="fa fa-chevron-right mr-2"></span>Términos y condiciones</a></li>
-				</ul>
-			  </div>
-			</div>
-			<div class="col-sm-12 col-md">
-			  <div class="ftco-footer-widget mb-4">
-				  <h2 class="ftco-heading-2">Contáctanos</h2>
-				  <div class="block-23 mb-3">
-					<ul>
-					  <li><span class="icon fa fa-map marker"></span><span class="text">Direccion de Tayta Fermentos</span></li>
-					  <li><a href="#"><span class="icon fa fa-phone"></span><span class="text">968 204 147</span></a></li>
-					  <li><a href="#"><span class="icon fa fa-paper-plane pr-4"></span><span class="text">contacto@taytafermentos.com.pe</span></a></li>
-					</ul>
-				  </div>
-			  </div>
-			</div>
-		  </div>
-		</div>
-		<div class="container-fluid px-0 py-5 bg-black">
-			<div class="container">
-				<div class="row">
-				<div class="col-md-12">
-		  
-				  <p class="mb-0" style="color: rgba(255,255,255,.5);"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-		 &copy;<script>document.write(new Date().getFullYear());</script> Tayta Fermentos.Todos los derechos reservados 
-		 <img src="images/visa_sin fondo.png" alt="Visa" style="width: 40px; margin-right: 10px;">
-		 <img src="images/33333-cutout.png" alt="Master" style="width: 40px; margin-right: 10px;">
-		<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+			<div class="row justify-content-center">
+				<!-- Columna Izquierda: Formulario de Datos de Facturación -->
+				<div class="col-xl-6 ftco-animate">
+					<form action="checkout.php" method="POST" class="billing-form">
+						<h3 class="mb-4 billing-heading">Detalles de Facturación</h3>
+						<div class="row align-items-end">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="firstname">Nombres</label>
+									<input type="text" class="form-control" name="firstname" id="firstname" required>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="lastname">Apellidos</label>
+									<input type="text" class="form-control" name="lastname" id="lastname" required>
+								</div>
+							</div>
+							<div class="w-100"></div>
+							<div class="col-md-12">
+								<div class="form-group">
+									<label for="country">País</label>
+									<div class="select-wrap">
+										<div class="icon"><span class="ion-ios-arrow-down"></span></div>
+										<select name="country" class="form-control" required>
+											<option value="Perú">Perú</option>
+											<!-- Otros países si es necesario -->
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="w-100"></div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="streetaddress">Dirección</label>
+									<input type="text" class="form-control" name="streetaddress" required>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<input type="text" class="form-control" placeholder="Apartamento, suite, unidad etc: (opcional)">
+								</div>
+							</div>
+							<div class="w-100"></div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="towncity">Ciudad</label>
+									<input type="text" class="form-control" name="towncity" required>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="postcodezip">Código Postal</label>
+									<input type="text" class="form-control" name="postcodezip" required>
+								</div>
+							</div>
+							<div class="w-100"></div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="phone">Celular</label>
+									<input type="text" class="form-control" name="phone" required>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="emailaddress">Correo</label>
+									<input type="email" class="form-control" name="emailaddress" required>
+								</div>
+							</div>
+							<div class="w-100"></div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="dni">DNI</label>
+									<input type="text" class="form-control" name="dni">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="codigoDistrito">Distrito</label>
+									<input type="text" class="form-control" name="codigoDistrito" required>
+								</div>
+							</div>
+						</div>
+
+						<!-- Mostrar errores si existen -->
+						<?php if (isset($error)): ?>
+							<p class="text-danger"><?php echo $error; ?></p>
+						<?php endif; ?>
+					</form>
 				</div>
-			  </div>
+
+				<!-- Columna Derecha: Total Compras y Métodos de Pago -->
+				<div class="col-xl-6 d-flex flex-column">
+					<!-- Total Compras -->
+					<div class="cart-detail cart-total p-3 p-md-4 mb-4">
+						<h3 class="billing-heading mb-4">Total Compras</h3>
+						<?php foreach ($productos_carrito as $id_producto => $cantidad):
+							// Obtener detalles del producto desde la base de datos
+							$query = "SELECT titulo, precio FROM producto WHERE codigo = $id_producto";
+							$result = $conn->query($query);
+							if ($result && $row = $result->fetch_assoc()):
+								$subtotal = $row['precio'] * $cantidad;
+								$total += $subtotal; ?>
+								<p class="d-flex">
+									<span><?php echo $row['titulo']; ?> x <?php echo $cantidad; ?></span>
+									<span>S/ <?php echo number_format($subtotal, 2); ?></span>
+								</p>
+						<?php endif; endforeach; ?>
+						<hr>
+						<p class="d-flex total-price">
+							<span>Total</span>
+							<span>S/ <?php echo number_format($total, 2); ?></span>
+						</p>
+					</div>
+
+					<!-- Métodos de Pago -->
+					<div class="cart-detail p-3 p-md-4">
+						<h3 class="billing-heading mb-4">Método de Pago</h3>
+						<form action="checkout.php" method="POST">
+							<div class="form-group">
+								<div class="col-md-12">
+									<div class="radio">
+									<label><input type="radio" name="optradio" value="Transferencia" required> Transferencia</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-md-12">
+									<div class="radio">
+									<label><input type="radio" name="optradio" value="Tarjeta" required> Tarjeta de Crédito/Débito</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-md-12">
+									<div class="radio">
+									<label><input type="radio" name="optradio" value="Yape/Plin" required> Yape / Plin</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-md-12">
+									<div class="checkbox">
+									<label><input type="checkbox" value="" required> He leído y acepto los términos y condiciones</label>
+									</div>
+								</div>
+							</div>
+							<input type="hidden" name="total" value="<?php echo $total; ?>">
+							<button type="submit" class="btn btn-primary py-3 px-4">Realizar Pedido</button>
+						</form>
+					</div>
+				</div>
 			</div>
 		</div>
-	  </footer>
+	</section>
+
+    <?php include('footer.php'); ?>
     
   
 
