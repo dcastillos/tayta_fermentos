@@ -2,30 +2,88 @@
 session_start();
 include('db.php'); // Conexión a la base de datos
 
-// Simulación de obtener el ID del pedido desde la redirección (puedes pasar el ID por GET o SESSION)
-$codigoPedido = isset($_GET['pedido_id']) ? (int)$_GET['pedido_id'] : 0;
+// Verificar si el formulario fue enviado correctamente
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Obtener datos del formulario
+    $nombres = $_POST['firstname'] ?? '';
+    $apellidos = $_POST['lastname'] ?? '';
+    $email = $_POST['emailaddress'] ?? '';
+    $dni = $_POST['dni'] ?? '';
+    $celular = $_POST['phone'] ?? '';
+    $direccion_cliente = $_POST['streetaddress'] ?? '';
+    $codigoDistrito = $_POST['codigoDistrito'] ?? '';
+    $metodo_pago = $_POST['optradio'] ?? '';
+    $total = $_POST['total'] ?? 0;
 
-// Obtener los detalles del pedido
-$query_pedido = "SELECT p.numero, p.fecha, p.direccion, c.nombre, c.apellido, c.email, t.metodo_pago
-                 FROM pedido p
-                 JOIN cliente c ON p.codigoCliente = c.codigo
-                 LEFT JOIN transaccion t ON p.transaccionCodigo = t.codigo
-                 WHERE p.codigo = $codigoPedido";
-$result_pedido = $conn->query($query_pedido);
-$pedido = $result_pedido->fetch_assoc();
+    // Validar campos requeridos
+    if ($nombres && $apellidos && $email && $celular && $direccion_cliente && $codigoDistrito && $metodo_pago) {
+        // Guardar el cliente en la tabla cliente
+        $query_cliente = "INSERT INTO cliente (nombre, apellido, email, dni, celular, direccion, codigoDistrito)
+                          VALUES ('$nombres', '$apellidos', '$email', '$dni', '$celular', '$direccion_cliente', $codigoDistrito)";
+        
+        if ($conn->query($query_cliente)) {
+            // Obtener el ID del cliente recién insertado
+            $codigoCliente = $conn->insert_id;
 
-// Obtener los detalles de los productos del pedido
-$query_detalles = "SELECT dp.cantidad, dp.precioUnitario, dp.descripcion
-                   FROM detallepedido dp
-                   WHERE dp.pedido_codigo = $codigoPedido";
-$result_detalles = $conn->query($query_detalles);
+            // Generar un número de pedido único
+            $numero_pedido = 'PED-' . time();
 
-// Verificar si el pedido es válido
-if (!$pedido) {
-    echo "No se pudo encontrar el pedido.";
+            // Guardar el pedido en la tabla pedido
+            $query_pedido = "INSERT INTO pedido (numero, fecha, direccion, codigoCliente, codigoDistrito, transaccionCodigo)
+                             VALUES ('$numero_pedido', NOW(), '$direccion_cliente', $codigoCliente, $codigoDistrito, '$metodo_pago')";
+
+            if ($conn->query($query_pedido)) {
+                // Obtener el ID del pedido recién insertado
+                $codigoPedido = $conn->insert_id;
+
+                // Guardar los detalles del pedido en la tabla detallepedido
+                foreach ($_SESSION['carrito'] as $id_producto => $cantidad) {
+                    // Obtener detalles del producto
+                    $query_producto = "SELECT titulo, precio FROM producto WHERE codigo = $id_producto";
+                    $result_producto = $conn->query($query_producto);
+                    if ($result_producto && $row = $result_producto->fetch_assoc()) {
+                        $precioUnitario = $row['precio'];
+                        $descripcion = $row['titulo'];
+
+                        $query_detalle = "INSERT INTO detallepedido (cantidad, precioUnitario, descripcion, pedido_codigo, presentacion_codigo)
+                                          VALUES ($cantidad, $precioUnitario, '$descripcion', $codigoPedido, $id_producto)";
+                        $conn->query($query_detalle);
+                    }
+                }
+
+                // Obtener los detalles para mostrar en la confirmación
+                $query_pedido_confirm = "SELECT p.numero, p.fecha, p.direccion, c.nombre, c.apellido, t.metodo_pago
+                                         FROM pedido p
+                                         JOIN cliente c ON p.codigoCliente = c.codigo
+                                         LEFT JOIN transaccion t ON p.transaccionCodigo = t.codigo
+                                         WHERE p.codigo = $codigoPedido";
+                $result_pedido = $conn->query($query_pedido_confirm);
+                $pedido = $result_pedido->fetch_assoc();
+
+                // Obtener los detalles de los productos del pedido
+                $query_detalles = "SELECT dp.cantidad, dp.precioUnitario, dp.descripcion
+                                   FROM detallepedido dp
+                                   WHERE dp.pedido_codigo = $codigoPedido";
+                $result_detalles = $conn->query($query_detalles);
+
+                // Limpiar el carrito después de procesar la orden
+                $_SESSION['carrito'] = [];
+            } else {
+                echo "Hubo un error al procesar tu pedido. Por favor, intenta de nuevo.";
+                exit;
+            }
+        } else {
+            echo "Hubo un error al guardar los datos del cliente. Por favor, intenta de nuevo.";
+            exit;
+        }
+    } else {
+        echo "Error: Por favor, completa todos los campos requeridos.";
+        exit;
+    }
+} else {
+    echo "Error: No se recibieron datos del formulario.";
     exit;
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -68,61 +126,61 @@ if (!$pedido) {
     
 
     <section class="ftco-section">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8 text-center">
-                <h2 class="mb-4">¡Gracias por tu compra, <?php echo $pedido['nombre']; ?>!</h2>
-                <p>Tu pedido ha sido procesado exitosamente.</p>
-                <p class="lead">Número de Pedido: <strong><?php echo $pedido['numero']; ?></strong></p>
-                <hr class="mb-4">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8 text-center">
+                    <h2 class="mb-4">¡Gracias por tu compra, <?php echo $pedido['nombre']; ?>!</h2>
+                    <p>Tu pedido ha sido procesado exitosamente.</p>
+                    <p class="lead">Número de Pedido: <strong><?php echo $pedido['numero']; ?></strong></p>
+                    <hr class="mb-4">
+                </div>
             </div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-md-10">
-                <h4 class="mb-4">Resumen de tu Compra</h4>
-                <table class="table">
-                    <thead class="thead-primary">
-                        <tr>
-                            <th>Producto</th>
-                            <th>Cantidad</th>
-                            <th>Precio Unitario</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $total = 0;
-                        while ($detalle = $result_detalles->fetch_assoc()):
-                            $subtotal = $detalle['cantidad'] * $detalle['precioUnitario'];
-                            $total += $subtotal;
-                        ?>
-                        <tr>
-                            <td><?php echo $detalle['descripcion']; ?></td>
-                            <td><?php echo $detalle['cantidad']; ?></td>
-                            <td>S/ <?php echo number_format($detalle['precioUnitario'], 2); ?></td>
-                            <td>S/ <?php echo number_format($subtotal, 2); ?></td>
-                        </tr>
-                        <?php endwhile; ?>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th colspan="3" class="text-right">Total</th>
-                            <th>S/ <?php echo number_format($total, 2); ?></th>
-                        </tr>
-                    </tfoot>
-                </table>
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <h4 class="mb-4">Resumen de tu Compra</h4>
+                    <table class="table">
+                        <thead class="thead-primary">
+                            <tr>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
+                                <th>Precio Unitario</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $total = 0;
+                            while ($detalle = $result_detalles->fetch_assoc()):
+                                $subtotal = $detalle['cantidad'] * $detalle['precioUnitario'];
+                                $total += $subtotal;
+                            ?>
+                            <tr>
+                                <td><?php echo $detalle['descripcion']; ?></td>
+                                <td><?php echo $detalle['cantidad']; ?></td>
+                                <td>S/ <?php echo number_format($detalle['precioUnitario'], 2); ?></td>
+                                <td>S/ <?php echo number_format($subtotal, 2); ?></td>
+                            </tr>
+                            <?php endwhile; ?>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="3" class="text-right">Total</th>
+                                <th>S/ <?php echo number_format($total, 2); ?></th>
+                            </tr>
+                        </tfoot>
+                    </table>
 
-                <h4 class="mt-5">Detalles del Pago</h4>
-                <p>Método de Pago: <strong><?php echo $pedido['metodo_pago']; ?></strong></p>
-                <p>Dirección de Envío: <strong><?php echo $pedido['direccion']; ?></strong></p>
+                    <h4 class="mt-5">Detalles del Pago</h4>
+                    <p>Método de Pago: <strong><?php echo $pedido['metodo_pago']; ?></strong></p>
+                    <p>Dirección de Envío: <strong><?php echo $pedido['direccion']; ?></strong></p>
 
-                <div class="mt-5">
-                    <a href="index.php" class="btn btn-primary">Volver a la Tienda</a>
+                    <div class="mt-5">
+                        <a href="index.php" class="btn btn-primary">Volver a la Tienda</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
     <?php include('footer.php'); ?>
     

@@ -7,79 +7,17 @@ if (!isset($_SESSION['carrito'])) {
     $_SESSION['carrito'] = [];
 }
 
-// Capturar y validar la información del formulario al enviar la orden
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-	
-    // Datos del cliente
-    $nombres = $_POST['firstname'] ?? '';
-    $apellidos = $_POST['lastname'] ?? '';
-    $email = $_POST['emailaddress'] ?? '';
-    $genero = $_POST['gender'] ?? '';  
-    $dni = $_POST['dni'] ?? '';       
-    $celular = $_POST['phone'] ?? '';
-    $direccion_cliente = $_POST['streetaddress'] ?? '';
-    $codigoDistrito = $_POST['codigoDistrito'] ?? '';
-
-    // Datos del pedido
-    $direccion_envio = $_POST['streetaddress'] ?? ''; 
-    $observacion = $_POST['observacion'] ?? '';
-    $metodo_pago = $_POST['optradio'];
-    $total = $_POST['total']; // Total calculado del carrito
-
-	if ($nombres && $apellidos && $email && $celular && $direccion_cliente && $codigoDistrito) {
-
-		// Guardar el cliente en la tabla cliente
-		$query_cliente = "INSERT INTO cliente (nombre, apellido, email, genero, dni, celular, direccion, codigoDistrito)
-						VALUES ('$nombres', '$apellidos', '$email', '$genero', '$dni', '$celular', '$direccion_cliente', $codigoDistrito)";
-		
-		if ($conn->query($query_cliente)) {
-			// Obtener el ID del cliente recién insertado
-			$codigoCliente = $conn->insert_id;
-
-			// Generar un número de pedido único
-			$numero_pedido = 'PED-' . time();
-
-			// Guardar el pedido en la tabla pedido
-			$query_pedido = "INSERT INTO pedido (numero, fecha, direccion, observacion, codigoCliente, codigoDistrito, transaccionCodigo)
-							VALUES ('$numero_pedido', NOW(), '$direccion_envio', '$observacion', $codigoCliente, $codigoDistrito, $metodo_pago)";
-
-			if ($conn->query($query_pedido)) {
-				// Obtener el ID del pedido recién insertado
-				$codigoPedido = $conn->insert_id;
-
-				// Guardar los detalles del pedido en la tabla detallepedido
-				foreach ($_SESSION['carrito'] as $id_producto => $cantidad) {
-					// Obtener detalles del producto
-					$query_producto = "SELECT titulo, precio FROM producto WHERE codigo = $id_producto";
-					$result_producto = $conn->query($query_producto);
-					if ($result_producto && $row = $result_producto->fetch_assoc()) {
-						$precioUnitario = $row['precio'];
-						$descripcion = $row['titulo'];
-
-						$query_detalle = "INSERT INTO detallepedido (cantidad, precioUnitario, descripcion, pedido_codigo, presentacion_codigo)
-										VALUES ($cantidad, $precioUnitario, '$descripcion', $codigoPedido, $id_producto)";
-						$conn->query($query_detalle);
-					}
-				}
-
-				// Limpiar el carrito después de procesar la orden
-				$_SESSION['carrito'] = [];
-				header('Location: confirm.php'); // Redirigir a una página de confirmación
-				exit;
-			} else {
-				$error = "Hubo un error al procesar su pedido. Por favor, inténtelo de nuevo.";
-			}
-		} else {
-			$error = "Hubo un error al guardar los datos del cliente. Por favor, inténtelo de nuevo.";
-		}
-	} else {
-		$error = "Por favor, complete todos los campos requeridos.";
-	}
-}
-
-// Obtener productos del carrito desde la sesión
+// Verificar si hay datos del carrito para calcular el total
 $productos_carrito = $_SESSION['carrito'];
-$total = 0; // Variable para el total del carrito
+$total = 0;
+
+foreach ($productos_carrito as $id_producto => $cantidad) {
+    $query = "SELECT titulo, precio FROM producto WHERE codigo = $id_producto";
+    $result = $conn->query($query);
+    if ($result && $row = $result->fetch_assoc()) {
+        $total += $row['precio'] * $cantidad;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -116,7 +54,7 @@ $total = 0; // Variable para el total del carrito
 			<div class="row justify-content-center">
 				<!-- Columna Izquierda: Formulario de Datos de Facturación -->
 				<div class="col-xl-6 ftco-animate">
-					<form action="checkout.php" method="POST" class="billing-form">
+					<form action="confirm.php" method="POST" class="billing-form">
 						<h3 class="mb-4 billing-heading">Detalles de Facturación</h3>
 						<div class="row align-items-end">
 							<div class="col-md-6">
@@ -287,11 +225,6 @@ $total = 0; // Variable para el total del carrito
   <script src="js/owl.carousel.min.js"></script>
   <script src="js/jquery.magnific-popup.min.js"></script>
   <script src="js/jquery.animateNumber.min.js"></script>
-  <script src="js/scrollax.min.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
-  <script src="js/google-map.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
-  <script src="js/main.js"></script>
     
   </body>
 </html>
