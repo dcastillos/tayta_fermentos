@@ -14,60 +14,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $codigoDistrito = $_POST['codigoDistrito'] ?? '';
     $metodo_pago = $_POST['optradio'] ?? '';
     $total = $_POST['total'] ?? 0;
+    $genero = "Masculino";
 
     // Validar campos requeridos
     if ($nombres && $apellidos && $email && $celular && $direccion_cliente && $codigoDistrito && $metodo_pago) {
         // Guardar el cliente en la tabla cliente
         $query_cliente = "INSERT INTO cliente (nombre, apellido, email, genero, dni, celular, direccion, codigoDistrito)
-                          VALUES ('$nombres', '$apellidos', '$email', 'Masculino' '$dni', '$celular', '$direccion_cliente', $codigoDistrito)";
-        
+                  VALUES ('$nombres', '$apellidos', '$email', '$genero', '$dni', '$celular', '$direccion_cliente', $codigoDistrito)";
+
         if ($conn->query($query_cliente)) {
-            // Obtener el ID del cliente recién insertado
             $codigoCliente = $conn->insert_id;
 
-            // Generar un número de pedido único
-            $numero_pedido = 'PED-' . time();
-
-            // Guardar el pedido en la tabla pedido
-            $query_pedido = "INSERT INTO pedido (numero, fecha, direccion, codigoCliente, codigoDistrito, transaccionCodigo)
-                             VALUES ('$numero_pedido', NOW(), '$direccion_cliente', $codigoCliente, $codigoDistrito, '$metodo_pago')";
+            $query_pedido = "INSERT INTO pedido (fecha, direccion, observacion, codigoCliente, codigoDistrito, cupon_codigo, transaccionCodigo)
+                             VALUES (NOW(), '$direccion_cliente', '', $codigoCliente, $codigoDistrito, 1, '$metodo_pago')";
 
             if ($conn->query($query_pedido)) {
-                // Obtener el ID del pedido recién insertado
                 $codigoPedido = $conn->insert_id;
+                $numero_pedido = 'PED-' . sprintf('%06d', $codigoPedido);
+                $query_update = "UPDATE pedido SET numero = '$numero_pedido' WHERE codigo = $codigoPedido";
 
-                // Guardar los detalles del pedido en la tabla detallepedido
-                foreach ($_SESSION['carrito'] as $id_producto => $cantidad) {
-                    // Obtener detalles del producto
-                    $query_producto = "SELECT titulo, precio FROM producto WHERE codigo = $id_producto";
-                    $result_producto = $conn->query($query_producto);
-                    if ($result_producto && $row = $result_producto->fetch_assoc()) {
-                        $precioUnitario = $row['precio'];
-                        $descripcion = $row['titulo'];
+                if ($conn->query($query_update)) {
+                    // Guardar los detalles del pedido en la tabla detallepedido
+                    foreach ($_SESSION['carrito'] as $id_producto => $cantidad) {
+                        // Obtener detalles del producto
+                        $query_producto = "SELECT titulo, precio FROM producto WHERE codigo = $id_producto";
+                        $result_producto = $conn->query($query_producto);
+                        if ($result_producto && $row = $result_producto->fetch_assoc()) {
+                            $precioUnitario = $row['precio'];
+                            $descripcion = $row['titulo'];
 
-                        $query_detalle = "INSERT INTO detallepedido (cantidad, precioUnitario, descripcion, pedido_codigo, presentacion_codigo)
-                                          VALUES ($cantidad, $precioUnitario, '$descripcion', $codigoPedido, $id_producto)";
-                        $conn->query($query_detalle);
+                            $query_detalle = "INSERT INTO detallepedido (cantidad, precioUnitario, descripcion, pedido_codigo, presentacion_codigo)
+                                            VALUES ($cantidad, $precioUnitario, '$descripcion', $codigoPedido, 1)";
+                            $conn->query($query_detalle);
+                        }
                     }
+
+                    // Obtener los detalles para mostrar en la confirmación
+                    $query_pedido_confirm = "SELECT p.numero, p.fecha, p.direccion, c.nombre, c.apellido, p.transaccionCodigo
+                                            FROM pedido p
+                                            JOIN cliente c ON p.codigoCliente = c.codigo
+                                            WHERE p.codigo = $codigoPedido";
+                    $result_pedido = $conn->query($query_pedido_confirm);
+                    $pedido = $result_pedido->fetch_assoc();
+
+                    $query_detalles = "SELECT dp.cantidad, dp.precioUnitario, dp.descripcion
+                                    FROM detallepedido dp
+                                    WHERE dp.pedido_codigo = $codigoPedido";
+                    $result_detalles = $conn->query($query_detalles);
+
+                    // Limpiar el carrito después de procesar la orden
+                    $_SESSION['carrito'] = [];
+                } else {
+                    echo "Error al actualizar el número de pedido: " . $conn->error;
                 }
-
-                // Obtener los detalles para mostrar en la confirmación
-                $query_pedido_confirm = "SELECT p.numero, p.fecha, p.direccion, c.nombre, c.apellido, t.metodo_pago
-                                         FROM pedido p
-                                         JOIN cliente c ON p.codigoCliente = c.codigo
-                                         LEFT JOIN transaccion t ON p.transaccionCodigo = t.codigo
-                                         WHERE p.codigo = $codigoPedido";
-                $result_pedido = $conn->query($query_pedido_confirm);
-                $pedido = $result_pedido->fetch_assoc();
-
-                // Obtener los detalles de los productos del pedido
-                $query_detalles = "SELECT dp.cantidad, dp.precioUnitario, dp.descripcion
-                                   FROM detallepedido dp
-                                   WHERE dp.pedido_codigo = $codigoPedido";
-                $result_detalles = $conn->query($query_detalles);
-
-                // Limpiar el carrito después de procesar la orden
-                $_SESSION['carrito'] = [];
             } else {
                 echo "Hubo un error al procesar tu pedido. Por favor, intenta de nuevo.";
                 exit;
@@ -171,7 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </table>
 
                     <h4 class="mt-5">Detalles del Pago</h4>
-                    <p>Método de Pago: <strong><?php echo $pedido['metodo_pago']; ?></strong></p>
+                    <p>Método de Pago: <strong><?php echo $pedido['transaccionCodigo']; ?></strong></p>
                     <p>Dirección de Envío: <strong><?php echo $pedido['direccion']; ?></strong></p>
 
                     <div class="mt-5">
