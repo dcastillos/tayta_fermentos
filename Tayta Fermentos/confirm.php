@@ -18,8 +18,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validar campos requeridos
     if ($nombres && $apellidos && $email && $celular && $direccion_cliente && $codigoDistrito && $metodo_pago) {
         // Guardar el cliente en la tabla cliente
-        $query_cliente = "INSERT INTO cliente (nombre, apellido, email, dni, celular, direccion, codigoDistrito)
-                          VALUES ('$nombres', '$apellidos', '$email', '$dni', '$celular', '$direccion_cliente', $codigoDistrito)";
+        $query_cliente = "INSERT INTO cliente (nombre, apellido, email, genero, dni, celular, direccion, codigoDistrito)
+                          VALUES ('$nombres', '$apellidos', '$email', 'Masculino' '$dni', '$celular', '$direccion_cliente', $codigoDistrito)";
         
         if ($conn->query($query_cliente)) {
             // Obtener el ID del cliente recién insertado

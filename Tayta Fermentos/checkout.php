@@ -52,160 +52,159 @@ foreach ($productos_carrito as $id_producto => $cantidad) {
     <section class="ftco-section">
 		<div class="container">
 			<div class="row justify-content-center">
-				<!-- Columna Izquierda: Formulario de Datos de Facturación -->
-				<div class="col-xl-6 ftco-animate">
+				<div class="col-xl-12 ftco-animate">
+					<!-- Un solo formulario que incluye Datos de Facturación y Métodos de Pago -->
 					<form action="confirm.php" method="POST" class="billing-form">
-						<h3 class="mb-4 billing-heading">Detalles de Facturación</h3>
-						<div class="row align-items-end">
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="firstname">Nombres</label>
-									<input type="text" class="form-control" name="firstname" id="firstname" required>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="lastname">Apellidos</label>
-									<input type="text" class="form-control" name="lastname" id="lastname" required>
-								</div>
-							</div>
-							<div class="w-100"></div>
-							<div class="col-md-12">
-								<div class="form-group">
-									<label for="country">País</label>
-									<div class="select-wrap">
-										<div class="icon"><span class="ion-ios-arrow-down"></span></div>
-										<select name="country" class="form-control" required>
-											<option value="Perú">Perú</option>
-											<!-- Otros países si es necesario -->
-										</select>
+						<div class="row">
+							<!-- Columna Izquierda: Formulario de Datos de Facturación -->
+							<div class="col-xl-6">
+								<h3 class="mb-4 billing-heading">Detalles de Facturación</h3>
+								<div class="row align-items-end">
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="firstname">Nombres</label>
+											<input type="text" class="form-control" name="firstname" id="firstname" required>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="lastname">Apellidos</label>
+											<input type="text" class="form-control" name="lastname" id="lastname" required>
+										</div>
+									</div>
+									<div class="w-100"></div>
+									<div class="col-md-12">
+										<div class="form-group">
+											<label for="country">País</label>
+											<div class="select-wrap">
+												<div class="icon"><span class="ion-ios-arrow-down"></span></div>
+												<select name="country" class="form-control" required>
+													<option value="Perú">Perú</option>
+													<!-- Otros países si es necesario -->
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="w-100"></div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="streetaddress">Dirección</label>
+											<input type="text" class="form-control" name="streetaddress" required>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<input type="text" class="form-control" placeholder="Apartamento, suite, unidad etc: (opcional)">
+										</div>
+									</div>
+									<div class="w-100"></div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="towncity">Ciudad</label>
+											<input type="text" class="form-control" name="towncity" required>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="postcodezip">Código Postal</label>
+											<input type="text" class="form-control" name="postcodezip" required>
+										</div>
+									</div>
+									<div class="w-100"></div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="phone">Celular</label>
+											<input type="text" class="form-control" name="phone" required>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="emailaddress">Correo</label>
+											<input type="email" class="form-control" name="emailaddress" required>
+										</div>
+									</div>
+									<div class="w-100"></div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="dni">DNI</label>
+											<input type="text" class="form-control" name="dni">
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="codigoDistrito">Distrito</label>
+											<input type="text" class="form-control" name="codigoDistrito" required>
+										</div>
 									</div>
 								</div>
 							</div>
-							<div class="w-100"></div>
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="streetaddress">Dirección</label>
-									<input type="text" class="form-control" name="streetaddress" required>
+
+							<!-- Columna Derecha: Total Compras y Métodos de Pago -->
+							<div class="col-xl-6">
+								<!-- Total Compras -->
+								<div class="cart-detail cart-total p-3 p-md-4 mb-4">
+									<h3 class="billing-heading mb-4">Total Compras</h3>
+									<?php foreach ($productos_carrito as $id_producto => $cantidad):
+										// Obtener detalles del producto desde la base de datos
+										$query = "SELECT titulo, precio FROM producto WHERE codigo = $id_producto";
+										$result = $conn->query($query);
+										if ($result && $row = $result->fetch_assoc()):
+											$subtotal = $row['precio'] * $cantidad;
+											$total += $subtotal; ?>
+											<p class="d-flex">
+												<span><?php echo $row['titulo']; ?> x <?php echo $cantidad; ?></span>
+												<span>S/ <?php echo number_format($subtotal, 2); ?></span>
+											</p>
+									<?php endif; endforeach; ?>
+									<hr>
+									<p class="d-flex total-price">
+										<span>Total</span>
+										<span>S/ <?php echo number_format($total, 2); ?></span>
+									</p>
+									<input type="hidden" name="total" value="<?php echo $total; ?>">
 								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="form-group">
-									<input type="text" class="form-control" placeholder="Apartamento, suite, unidad etc: (opcional)">
-								</div>
-							</div>
-							<div class="w-100"></div>
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="towncity">Ciudad</label>
-									<input type="text" class="form-control" name="towncity" required>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="postcodezip">Código Postal</label>
-									<input type="text" class="form-control" name="postcodezip" required>
-								</div>
-							</div>
-							<div class="w-100"></div>
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="phone">Celular</label>
-									<input type="text" class="form-control" name="phone" required>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="emailaddress">Correo</label>
-									<input type="email" class="form-control" name="emailaddress" required>
-								</div>
-							</div>
-							<div class="w-100"></div>
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="dni">DNI</label>
-									<input type="text" class="form-control" name="dni">
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="codigoDistrito">Distrito</label>
-									<input type="text" class="form-control" name="codigoDistrito" required>
+
+								<!-- Métodos de Pago -->
+								<div class="cart-detail p-3 p-md-4">
+									<h3 class="billing-heading mb-4">Método de Pago</h3>
+									<div class="form-group">
+										<div class="col-md-12">
+											<div class="radio">
+												<label><input type="radio" name="optradio" value="Transferencia" required> Transferencia</label>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-12">
+											<div class="radio">
+												<label><input type="radio" name="optradio" value="Tarjeta" required> Tarjeta de Crédito/Débito</label>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-12">
+											<div class="radio">
+												<label><input type="radio" name="optradio" value="Yape/Plin" required> Yape / Plin</label>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-12">
+											<div class="checkbox">
+												<label><input type="checkbox" value="" required> He leído y acepto los términos y condiciones</label>
+											</div>
+										</div>
+									</div>
+									<button type="submit" class="btn btn-primary py-3 px-4">Realizar Pedido</button>
 								</div>
 							</div>
 						</div>
-
-						<!-- Mostrar errores si existen -->
-						<?php if (isset($error)): ?>
-							<p class="text-danger"><?php echo $error; ?></p>
-						<?php endif; ?>
 					</form>
-				</div>
-
-				<!-- Columna Derecha: Total Compras y Métodos de Pago -->
-				<div class="col-xl-6 d-flex flex-column">
-					<!-- Total Compras -->
-					<div class="cart-detail cart-total p-3 p-md-4 mb-4">
-						<h3 class="billing-heading mb-4">Total Compras</h3>
-						<?php foreach ($productos_carrito as $id_producto => $cantidad):
-							// Obtener detalles del producto desde la base de datos
-							$query = "SELECT titulo, precio FROM producto WHERE codigo = $id_producto";
-							$result = $conn->query($query);
-							if ($result && $row = $result->fetch_assoc()):
-								$subtotal = $row['precio'] * $cantidad;
-								$total += $subtotal; ?>
-								<p class="d-flex">
-									<span><?php echo $row['titulo']; ?> x <?php echo $cantidad; ?></span>
-									<span>S/ <?php echo number_format($subtotal, 2); ?></span>
-								</p>
-						<?php endif; endforeach; ?>
-						<hr>
-						<p class="d-flex total-price">
-							<span>Total</span>
-							<span>S/ <?php echo number_format($total, 2); ?></span>
-						</p>
-					</div>
-
-					<!-- Métodos de Pago -->
-					<div class="cart-detail p-3 p-md-4">
-						<h3 class="billing-heading mb-4">Método de Pago</h3>
-						<form action="checkout.php" method="POST">
-							<div class="form-group">
-								<div class="col-md-12">
-									<div class="radio">
-									<label><input type="radio" name="optradio" value="Transferencia" required> Transferencia</label>
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<div class="col-md-12">
-									<div class="radio">
-									<label><input type="radio" name="optradio" value="Tarjeta" required> Tarjeta de Crédito/Débito</label>
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<div class="col-md-12">
-									<div class="radio">
-									<label><input type="radio" name="optradio" value="Yape/Plin" required> Yape / Plin</label>
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<div class="col-md-12">
-									<div class="checkbox">
-									<label><input type="checkbox" value="" required> He leído y acepto los términos y condiciones</label>
-									</div>
-								</div>
-							</div>
-							<input type="hidden" name="total" value="<?php echo $total; ?>">
-							<button type="submit" class="btn btn-primary py-3 px-4">Realizar Pedido</button>
-						</form>
-					</div>
 				</div>
 			</div>
 		</div>
 	</section>
+
 
     <?php include('footer.php'); ?>
     
@@ -225,6 +224,7 @@ foreach ($productos_carrito as $id_producto => $cantidad) {
   <script src="js/owl.carousel.min.js"></script>
   <script src="js/jquery.magnific-popup.min.js"></script>
   <script src="js/jquery.animateNumber.min.js"></script>
-    
+  <script src="js/scrollax.min.js"></script>
+  <script src="js/main.js"></script>
   </body>
 </html>
