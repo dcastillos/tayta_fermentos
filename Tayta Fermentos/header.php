@@ -61,7 +61,7 @@ if (isset($_SESSION['carrito'])) {
                 <li class="nav-item"><a href="about.php" class="nav-link">Nosotros</a></li>
                 <li class="nav-item"><a href="product.php" class="nav-link">Productos</a></li>
                 <li class="nav-item"><a href="blog.php" class="nav-link">Membresía</a></li>
-                <li class="nav-item"><a href="contact.php" class="nav-link">Contacto</a></li>
+                <li class="nav-item"><a href="contact.html" class="nav-link">Contactos</a></li>
             </ul>
         </div>
     </div>
