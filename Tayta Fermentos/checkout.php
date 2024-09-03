@@ -41,6 +41,7 @@ foreach ($productos_carrito as $id_producto => $cantidad) {
     
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/style.css">
+	<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
   </head>
   <body>
 
