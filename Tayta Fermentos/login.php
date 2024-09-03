@@ -65,7 +65,7 @@
 	        <ul class="navbar-nav ml-auto">
 	          <li class="nav-item"><a href="about.html" class="nav-link">Nosotros</a></li>
 	          <li class="nav-item dropdown">
-			  <li class="nav-item"><a href="product.html" class="nav-link">Productos</a></li>
+			  <li class="nav-item"><a href="product.php" class="nav-link">Productos</a></li>
             </li>
 	          <li class="nav-item"><a href="blog.html" class="nav-link">Membresía</a></li> 
 	          <li class="nav-item"><a href="contact.html" class="nav-link">Contacto</a></li>
