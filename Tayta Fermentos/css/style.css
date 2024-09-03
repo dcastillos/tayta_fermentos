@@ -2485,7 +2485,7 @@ fieldset:disabled a.btn {
 
 .btn-block {
   display: block;
-  width: 100%; }
+  width: 25%; }
   .btn-block + .btn-block {
     margin-top: 0.5rem; }
 
@@ -4713,14 +4713,14 @@ a.close.disabled {
   -webkit-box-pack: end;
   -ms-flex-pack: end;
   justify-content: flex-end;
-  padding: 1rem;
+  padding: 15rem;
   border-top: 1px solid #e9ecef;
-  border-bottom-right-radius: 0.3rem;
-  border-bottom-left-radius: 0.3rem; }
+  border-bottom-right-radius: 0.10rem;
+  border-bottom-left-radius: 20rem; }
   .modal-footer > :not(:first-child) {
-    margin-left: .25rem; }
+    margin-left: .250rem; }
   .modal-footer > :not(:last-child) {
-    margin-right: .25rem; }
+    margin-right: .250rem; }
 
 .modal-scrollbar-measure {
   position: absolute;
@@ -9197,8 +9197,8 @@ textarea.form-control {
   padding-bottom: 0; }
 
 .ftco-footer {
-  font-size: 16px;
-  padding: 6em 0 0 0;
+  font-size: 20px;
+  padding: 2em 0 0 0;
   background: #1a1a1a;
   color: rgba(255, 255, 255, 0.7); }
   .ftco-footer .logo {
@@ -9211,7 +9211,7 @@ textarea.form-control {
     font-weight: normal;
     color: rgba(255, 255, 255, 0.8);
     margin-bottom: 30px;
-    font-size: 20px;
+    font-size: 25px;
     font-weight: 400; }
   .ftco-footer .ftco-footer-widget ul li {
     margin-bottom: 10px; }
@@ -9665,7 +9665,7 @@ textarea.form-control {
     width: 100%; }
 
 .contactForm .label {
-  color: #b7472a !important;
+  color: #23272b !important;
   text-transform: uppercase;
   font-size: 12px;
   font-weight: 600; }
@@ -10021,8 +10021,12 @@ textarea.form-control {
     font-size: 20px; /* Tamaño del icono */
   }
   .button-container {
-    display: flex; /* Utiliza Flexbox */
-    justify-content: center; /* Centra horizontalmente */
+    display: flex; /* Usar flexbox para alinear botones */
+    gap: 80px; /* Espacio entre los botones */
+    justify-content: center; /* Centrar botones en el contenedor */
+    margin-top: 100px;
+    margin-bottom: 20px !important;
+
   }
   
   
