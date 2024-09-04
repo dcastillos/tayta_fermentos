@@ -1,4 +1,5 @@
 <?php
+session_start();
 include 'db.php';
 
 if (!empty($_SESSION['carrito'])) {

@@ -23,9 +23,9 @@ if (isset($_SESSION['carrito'])) {
             <div class="col-md-6 d-flex justify-content-md-end">
                 <div class="social-media mr-4">
                     <p class="mb-0 d-flex">
-                        <a href="#" class="d-flex align-items-center justify-content-center"><span class="fa fa-facebook"><i class="sr-only">Facebook</i></span></a>
-                        <a href="#" class="d-flex align-items-center justify-content-center"><span class="fa fa-twitter"><i class="sr-only">Twitter</i></span></a>
-                        <a href="#" class="d-flex align-items-center justify-content-center"><span class="fa fa-instagram"><i class="sr-only">Instagram</i></span></a>
+                        <a href="https://www.facebook.com/taytafermentos/" class="d-flex align-items-center justify-content-center"><span class="fa fa-facebook"><i class="sr-only">Facebook</i></span></a>
+                        
+                        <a href="https://www.instagram.com/taytafermentos/?hl=es" class="d-flex align-items-center justify-content-center"><span class="fa fa-instagram"><i class="sr-only">Instagram</i></span></a>
                     </p>
                 </div>
                 <div class="reg">
