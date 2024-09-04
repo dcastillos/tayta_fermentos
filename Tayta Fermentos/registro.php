@@ -27,13 +27,13 @@
    
 
 	<section class="ftco-section bg-light min-h-screen flex items-center justify-center" style="margin-top: 20px;">
-		<div class="container">
-			<div class="row justify-content-center">
-				<div class="col-md-7">
-					<div class="contact-wrap w-100 p-md-5 p-4 text-center mx-auto">
-						
-						<!-- Social login buttons -->
-						<div class="mb-4">
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-md-7">
+				<div class="contact-wrap w-100 p-md-5 p-4 text-center mx-auto">
+					
+					<!-- Social login buttons -->
+					<div class="mb-4">
 	<p class="text-center mb-3">Elija una opción para registrarse:</p>
 	<div class="row">
 		<div class="col mb-2">
@@ -49,49 +49,45 @@
 	</div>
 </div>
 
-	
-						<h3 class="mb-4">Iniciar Sesión</h3>
-						
-						<form class="text-center mx-auto">
-							<!-- Email input -->
-							<div data-mdb-input-init class="form-outline mb-4 text-left mx-auto" style="max-width: 300px;">
-								<input type="email" id="form2Example1" class="form-control" placeholder="Ej.: ejemplo@mail.com" />
-								<label class="form-label" for="form2Example1">Correo</label>
-							</div>
-	
-							<!-- Password input -->
-							<div data-mdb-input-init class="form-outline mb-4 text-left mx-auto" style="max-width: 300px;">
-								<input type="password" id="form2Example2" class="form-control" placeholder="Ingrese su contraseña" />
-								<label class="form-label" for="form2Example2">Contraseña</label>
-							</div>
-	
-							<!-- 2 column grid layout for inline styling -->
-							<div class="row mb-4">
-								<div class="col d-flex justify-content-center">
-									<!-- Checkbox -->
-									<div class="form-check">
-										<input class="form-check-input" type="checkbox" value="" id="form2Example31" checked />
-										<label class="form-check-label" for="form2Example31"> Recordarme </label>
-									</div>
-								</div>
-	
-								<div class="col">
-									<!-- Simple link -->
-									<a href="restablecerpass.php">Olvidé mi contraseña?</a>
-								</div>
-							</div>
-	
-							<!-- Submit button -->
-							<button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4 mx-auto" style="max-width: 300px;">Ingresar</button>
-						</form>
-						
-						<!-- Registration message -->
-						<p class="mt-4">¿No tienes una cuenta? <a href="registro.php" class="text-primary">Regístrate</a></p>
-					</div>
+					<h3 class="mb-4">Crear Cuenta</h3>
+					
+					<form class="text-center mx-auto">
+						<!-- Name input -->
+						<div data-mdb-input-init class="form-outline mb-4 text-left mx-auto" style="max-width: 300px;">
+							<input type="text" id="formName" class="form-control" placeholder="Ej.: Juan Pérez" />
+							<label class="form-label" for="formName">Nombre Completo</label>
+						</div>
+
+						<!-- Email input -->
+						<div data-mdb-input-init class="form-outline mb-4 text-left mx-auto" style="max-width: 300px;">
+							<input type="email" id="form2Example1" class="form-control" placeholder="Ej.: ejemplo@mail.com" />
+							<label class="form-label" for="form2Example1">Correo</label>
+						</div>
+
+						<!-- Password input -->
+						<div data-mdb-input-init class="form-outline mb-4 text-left mx-auto" style="max-width: 300px;">
+							<input type="password" id="form2Example2" class="form-control" placeholder="Ingrese su contraseña" />
+							<label class="form-label" for="form2Example2">Contraseña</label>
+						</div>
+
+						<!-- Confirm Password input -->
+						<div data-mdb-input-init class="form-outline mb-4 text-left mx-auto" style="max-width: 300px;">
+							<input type="password" id="formConfirmPassword" class="form-control" placeholder="Confirme su contraseña" />
+							<label class="form-label" for="formConfirmPassword">Confirmar Contraseña</label>
+						</div>
+
+						<!-- Submit button -->
+						<button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4 mx-auto" style="max-width: 300px;">Registrarse</button>
+					</form>
+					
+					<!-- Login message -->
+					<p class="mt-4">¿Ya tienes una cuenta? <a href="login.php" class="text-primary">Inicia Sesión</a></p>
 				</div>
 			</div>
 		</div>
-	</section>
+	</div>
+</section>
+
 	
 	<?php include('footer.php'); ?>  
 
