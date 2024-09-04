@@ -51,11 +51,11 @@ $result_categoria = $conn->query($query_categoria);
 
                     <div class="row">
                         <?php
-                        // Obtener productos de la base de datos
+
                         $query_productos = "SELECT p.codigo, p.titulo, p.precio, p.descrpcion, i.nombre as ruta, c.nombre AS categoria, p.slug 
                                             FROM producto p
                                             LEFT JOIN imagenproducto i ON p.codigo = i.producto_codigo
-                                            LEFT JOIN categoria c ON p.codigoCategoria = c.codigo"; // Suponiendo que hay una imagen principal
+                                            LEFT JOIN categoria c ON p.codigoCategoria = c.codigo";
 
                         $result_productos = $conn->query($query_productos);
                         while ($row = $result_productos->fetch_assoc()):
@@ -66,7 +66,9 @@ $result_categoria = $conn->query($query_categoria);
                                 <div class="img d-flex align-items-center justify-content-center" style="background-image: url(<?php echo $row['ruta']; ?>); background-size: contain;">
                                     <div class="desc">
                                         <p class="meta-prod d-flex">
-                                            <a href="cart.php?add=<?php echo $row['codigo']; ?>" class="d-flex align-items-center justify-content-center"><span class="flaticon-shopping-bag"></span></a>
+                                            <a href="#" class="d-flex align-items-center justify-content-center" onclick="addToCart(<?php echo $row['codigo']; ?>); return false;">
+                                                <span class="flaticon-shopping-bag"></span>
+                                            </a>
                                             <a href="#" class="d-flex align-items-center justify-content-center"><span class="flaticon-heart"></span></a>
                                             <a href="product-single.php?id=<?php echo $row['codigo']; ?>" class="d-flex align-items-center justify-content-center"><span class="flaticon-visibility"></span></a>
                                         </p>
@@ -79,7 +81,6 @@ $result_categoria = $conn->query($query_categoria);
                                 </div>
                             </div>
                         </div>
-                        <!-- Fin de la tarjeta de producto -->
                         <?php endwhile; ?>
                     </div>
                     
@@ -109,8 +110,21 @@ $result_categoria = $conn->query($query_categoria);
         </div>
     </section>
 
-		<a href="https://wa.me/968204147" target="_blank" class="whatsapp">
-			<img src="images/whats.png" alt="WhatsApp" class="whatsapp-icon">
+    <!-- Barra lateral del carrito -->
+    <div id="cart-sidebar">
+        <span class="closebtn" onclick="closeCartSidebar()">&times;</span>
+        <h3>Tu Carrito</h3>
+        <div id="cart-items">
+            <?php include 'cart_items.php'; ?>
+        </div>
+        <div class="cart-footer">
+            <a href="cart.php" class="btn btn-secondary">Ver Carrito</a>
+            <a href="checkout.php" class="btn btn-primary">Proceder al Pago</a>
+        </div>
+    </div>
+
+    <a href="https://wa.me/968204147" target="_blank" class="whatsapp">
+        <img src="images/whats.png" alt="WhatsApp" class="whatsapp-icon">
     </a>
 
 		

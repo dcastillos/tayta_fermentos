@@ -224,3 +224,40 @@
 
 })(jQuery);
 
+function openCartSidebar() {
+    document.getElementById("cart-sidebar").style.width = "350px"; 
+}
+
+function closeCartSidebar() {
+    document.getElementById("cart-sidebar").style.width = "0"; 
+}
+
+function addToCart(productId) {
+    fetch('cart.php?add=' + productId, {
+        method: 'GET',
+    })
+    .then(response => response.text())
+    .then(data => {
+        openCartSidebar();
+        updateCartItems(); 
+    })
+    .catch(error => console.error('Error al agregar el producto al carrito:', error));
+}
+
+function updateCartItems() {
+    fetch('cart_items.php')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('cart-items').innerHTML = data; 
+        })
+        .catch(error => console.error('Error al actualizar el carrito:', error));
+}
+
+function removeFromCart(productId) {
+    fetch('remove_from_cart.php?id=' + productId)
+        .then(response => response.text())
+        .then(data => {
+            updateCartItems(); 
+        })
+        .catch(error => console.error('Error al eliminar el producto:', error));
+}

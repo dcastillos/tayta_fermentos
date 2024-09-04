@@ -9994,4 +9994,72 @@ body{
     font-family: "Bebas Neue";
    }
 
-   
+
+/* Estilos para la barra lateral del carrito a la derecha */
+#cart-sidebar {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  top: 0;
+  right: 0; 
+  background-color: #f4f4f4;
+  overflow-x: hidden;
+  transition: 0.3s;
+  padding-top: 60px;
+  z-index: 1000;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.5); 
+}
+
+#cart-sidebar .closebtn {
+  position: absolute;
+  top: 10px;
+  left: 25px; 
+  font-size: 36px;
+  cursor: pointer;
+}
+
+#cart-sidebar .cart-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+#cart-sidebar .cart-item img {
+  width: 50px;
+  height: auto;
+  margin-right: 10px;
+  flex-shrink: 0; /* Evita que la imagen cambie de tamaño */
+}
+
+#cart-sidebar .cart-item .details {
+  flex-grow: 1; /* Permite que los detalles ocupen el espacio disponible */
+  display: flex;
+  flex-direction: column;
+}
+
+#cart-sidebar .cart-item .remove-btn {
+  margin-left: 10px;
+  cursor: pointer;
+  color: red;
+}
+
+#cart-sidebar .cart-item .title-price {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.cart-footer {
+  padding: 20px;
+  text-align: center;
+  border-top: 1px solid #ddd;
+}
+
+.cart-footer .btn {
+  margin: 5px 0;
+}
+
+#cart-sidebar h3 {
+  text-align: center;
+}
