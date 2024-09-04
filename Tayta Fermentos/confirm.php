@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $dni = $_POST['dni'] ?? '';
     $celular = $_POST['phone'] ?? '';
     $direccion_cliente = $_POST['streetaddress'] ?? '';
-    $codigoDistrito = $_POST['codigoDistrito'] ?? '';
+    $codigoDistrito = $_POST['distrito'] ?? '';
     $metodo_pago = $_POST['optradio'] ?? '';
     $total = $_POST['total'] ?? 0;
     $genero = "Masculino";

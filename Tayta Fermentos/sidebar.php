@@ -1,17 +1,26 @@
-<!-- Sidebar -->
+<?php
+include 'db.php';
+
+$query_categorias = "SELECT codigo, nombre FROM categoria";
+$result_categorias = $conn->query($query_categorias);
+?>
+
 <div class="sidebar-box ftco-animate">
     <div class="categories">
         <h3>Tipos de Productos</h3>
         <ul class="p-0">
-            <li><a href="#">Bebida <span class="fa fa-chevron-right"></span></a></li>
-            <li><a href="#">Aceite <span class="fa fa-chevron-right"></span></a></li>
-            <li><a href="#">Mantequilla <span class="fa fa-chevron-right"></span></a></li>
-            <li><a href="#">Product4 <span class="fa fa-chevron-right"></span></a></li>
-            <li><a href="#">Product5 <span class="fa fa-chevron-right"></span></a></li>
-            <li><a href="#">Product6 <span class="fa fa-chevron-right"></span></a></li>
+            <?php while ($row = $result_categorias->fetch_assoc()): ?>
+                <li>
+                    <a href="product.php?categoria=<?php echo $row['codigo']; ?>">
+                        <?php echo htmlspecialchars($row['nombre']); ?>
+                        <span class="fa fa-chevron-right"></span>
+                    </a>
+                </li>
+            <?php endwhile; ?>
         </ul>
     </div>
 </div>
+
 
 <div class="sidebar-box ftco-animate">
     <h3>Blog</h3>

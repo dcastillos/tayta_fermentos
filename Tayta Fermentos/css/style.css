@@ -8910,7 +8910,7 @@ h1, h2, h3, h4, h5,
         width: 32%; }
 
 .table-wrap {
-  overflow-x: scroll; }
+  overflow-x: scroll; width: 100%; }
 
 .table {
   min-width: 1000px !important;

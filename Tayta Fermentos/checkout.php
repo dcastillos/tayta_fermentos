@@ -99,16 +99,37 @@ foreach ($productos_carrito as $id_producto => $cantidad) {
 										</div>
 									</div>
 									<div class="w-100"></div>
-									<div class="col-md-6">
+									<div class="col-md-4">
 										<div class="form-group">
-											<label for="towncity">Ciudad</label>
-											<input type="text" class="form-control" name="towncity" required>
+											<label for="departamento">Departamento</label>
+											<select name="departamento" id="departamento" class="form-control" required>
+												<option value="">Seleccione</option>
+												<?php
+												$query_departamentos = "SELECT codigo, nombre FROM departamento";
+												$result_departamentos = $conn->query($query_departamentos);
+												while ($row = $result_departamentos->fetch_assoc()):
+												?>
+												<option value="<?php echo $row['codigo']; ?>"><?php echo $row['nombre']; ?></option>
+												<?php endwhile; ?>
+											</select>
 										</div>
 									</div>
-									<div class="col-md-6">
+
+									<div class="col-md-4">
 										<div class="form-group">
-											<label for="postcodezip">Código Postal</label>
-											<input type="text" class="form-control" name="postcodezip" required>
+											<label for="provincia">Provincia</label>
+											<select name="provincia" id="provincia" class="form-control" required>
+												<option value="">Seleccione</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="col-md-4">
+										<div class="form-group">
+											<label for="distrito">Distrito</label>
+											<select name="distrito" id="distrito" class="form-control" required>
+												<option value="">Seleccione</option>
+											</select>
 										</div>
 									</div>
 									<div class="w-100"></div>
@@ -129,12 +150,6 @@ foreach ($productos_carrito as $id_producto => $cantidad) {
 										<div class="form-group">
 											<label for="dni">DNI</label>
 											<input type="text" class="form-control" name="dni">
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label for="codigoDistrito">Distrito</label>
-											<input type="text" class="form-control" name="codigoDistrito" required>
 										</div>
 									</div>
 								</div>
@@ -227,5 +242,41 @@ foreach ($productos_carrito as $id_producto => $cantidad) {
   <script src="js/jquery.animateNumber.min.js"></script>
   <script src="js/scrollax.min.js"></script>
   <script src="js/main.js"></script>
+  <script>
+	document.getElementById('departamento').addEventListener('change', function() {
+		var departamentoId = this.value;
+		fetch('get_provincias.php?departamento_id=' + departamentoId)
+			.then(response => response.json())
+			.then(data => {
+				var provinciaSelect = document.getElementById('provincia');
+				provinciaSelect.innerHTML = '<option value="">Seleccione una provincia</option>';
+				data.forEach(function(provincia) {
+					var option = document.createElement('option');
+					option.value = provincia.codigo;
+					option.textContent = provincia.nombre;
+					provinciaSelect.appendChild(option);
+				});
+				document.getElementById('distrito').innerHTML = '<option value="">Seleccione</option>'; // Reset distritos
+			});
+	});
+
+	document.getElementById('provincia').addEventListener('change', function() {
+		var provinciaId = this.value;
+		fetch('get_distritos.php?provincia_id=' + provinciaId)
+			.then(response => response.json())
+			.then(data => {
+				var distritoSelect = document.getElementById('distrito');
+				distritoSelect.innerHTML = '<option value="">Seleccione</option>';
+				data.forEach(function(distrito) {
+					var option = document.createElement('option');
+					option.value = distrito.codigo;
+					option.textContent = distrito.nombre;
+					distritoSelect.appendChild(option);
+				});
+			});
+	});
+
+
+  </script>
   </body>
 </html>

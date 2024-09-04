@@ -1,5 +1,5 @@
 <?php
-session_start(); // Asegúrate de iniciar la sesión para acceder al carrito
+session_start(); 
 
 // Calcular la cantidad total de productos en el carrito
 $total_cantidad_carrito = 0;

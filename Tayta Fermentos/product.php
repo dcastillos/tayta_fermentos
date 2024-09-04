@@ -52,14 +52,19 @@ $result_categoria = $conn->query($query_categoria);
                     <div class="row">
                         <?php
 
-                        $query_productos = "SELECT p.codigo, p.titulo, p.precio, p.descrpcion, i.nombre as ruta, c.nombre AS categoria, p.slug 
-                                            FROM producto p
-                                            LEFT JOIN imagenproducto i ON p.codigo = i.producto_codigo
-                                            LEFT JOIN categoria c ON p.codigoCategoria = c.codigo";
+                            $categoria_id = isset($_GET['categoria']) ? (int)$_GET['categoria'] : 0;
 
-                        $result_productos = $conn->query($query_productos);
-                        while ($row = $result_productos->fetch_assoc()):
+                            $query_productos = "SELECT p.codigo, p.titulo, p.precio, p.descrpcion, i.nombre as ruta, c.nombre AS categoria, p.slug 
+                                                FROM producto p
+                                                LEFT JOIN imagenproducto i ON p.codigo = i.producto_codigo
+                                                LEFT JOIN categoria c ON p.codigoCategoria = c.codigo";
+                            if ($categoria_id > 0) {
+                                $query_productos .= " WHERE p.codigoCategoria = $categoria_id";
+                            }
+
+                            $result_productos = $conn->query($query_productos);
                         ?>
+                        <?php while ($row = $result_productos->fetch_assoc()): ?>
                         <!-- Comienzo de la tarjeta de producto -->
                         <div class="col-md-4 d-flex">
                             <div class="product ftco-animate">
@@ -75,8 +80,8 @@ $result_categoria = $conn->query($query_categoria);
                                     </div>
                                 </div>
                                 <div class="text text-center">
-                                    <span class="category"><?php echo $row['categoria']; ?></span>
-                                    <h2><?php echo $row['titulo']; ?></h2>
+                                    <span class="category"><?php echo htmlspecialchars($row['categoria']); ?></span>
+                                    <h2><?php echo htmlspecialchars($row['titulo']); ?></h2>
                                     <span class="price">S/ <?php echo number_format($row['precio'], 2); ?></span>
                                 </div>
                             </div>
