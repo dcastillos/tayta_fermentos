@@ -1,12 +1,12 @@
+
 <footer class="ftco-footer">
 	<div class="container">
 		<div class="row mb-5">
 			<div class="col-sm-12 col-md">
 				<div class="ftco-footer-widget mb-4">
-					<h2 class="ftco-heading-2 logo"><a href="#">EMPRESA</span></a></h2>
+					<h2 class="ftco-heading-2 logo"><a href="#">EMPRESA</a></h2>
 					<p>Nutre tu cuerpo, vive mejor. Descubre nuestros productos 100% saludables.</p>
 					<ul class="ftco-footer-social list-unstyled mt-2">
-						
 						<li class="ftco-animate"><a href="https://www.facebook.com/taytafermentos/"><span class="fa fa-facebook"></span></a></li>
 						<li class="ftco-animate"><a href="https://www.instagram.com/taytafermentos/?hl=es"><span class="fa fa-instagram"></span></a></li>
 					</ul>
@@ -15,13 +15,13 @@
 
 			<div class="col-sm-12 col-md">
 				<div class="ftco-footer-widget mb-4">
-					<h2 class="ftco-heading-2">Preguntas rápidas </h2>
+					<h2 class="ftco-heading-2">Preguntas rápidas</h2>
 					<ul class="list-unstyled">
-						<li><a href="#"><span class="fa fa-chevron-right mr-2"></span>Preguntas frecuentes</a></li>
-						<li><a href="#"><span class="fa fa-chevron-right mr-2"></span>Promociones y campañas</a></li>
-						<li><a href="#"><span class="fa fa-chevron-right mr-2"></span>Política de despacho</a></li>
-						<li><a href="#"><span class="fa fa-chevron-right mr-2"></span>Política de privacidad</a></li>
-						<li><a href="#"><span class="fa fa-chevron-right mr-2"></span>Términos y condiciones</a></li>
+						<li><a href="faq.php"><span class="fa fa-chevron-right mr-2"></span>Preguntas frecuentes</a></li>
+						<li><a href="promocion.php"><span class="fa fa-chevron-right mr-2"></span>Promociones y campañas</a></li>
+						<li><a href="politicadespacho.php"><span class="fa fa-chevron-right mr-2"></span>Política de despacho</a></li>
+						<li><a href="politicaprivacidad.php"><span class="fa fa-chevron-right mr-2"></span>Política de privacidad</a></li>
+						<li><a href="terminosycondiciones.php"><span class="fa fa-chevron-right mr-2"></span>Términos y condiciones</a></li>
 					</ul>
 				</div>
 			</div>
@@ -31,9 +31,10 @@
 					<h2 class="ftco-heading-2">Contáctanos</h2>
 					<div class="block-23 mb-3">
 						<ul>
-							<li><span class="icon fa fa-map-marker"></span><span class="text">Direccion de Tayta Fermentos</span></li>
+							<li><span class="icon fa fa-map-marker"></span><span class="text">Dirección de Tayta Fermentos</span></li>
 							<li><a href="#"><span class="icon fa fa-phone"></span><span class="text">968 204 147</span></a></li>
 							<li><a href="#"><span class="icon fa fa-paper-plane pr-4"></span><span class="text">contacto@taytafermentos.com.pe</span></a></li>
+							<li><a href="contact.php"><span class="icon fa fa-briefcase"></span><span class="text">Trabaja con nosotros </span></li>
 						</ul>
 					</div>
 				</div>
