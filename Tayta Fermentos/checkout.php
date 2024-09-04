@@ -8,7 +8,7 @@ if (!isset($_SESSION['carrito'])) {
 }
 
 // Verificar si hay datos del carrito para calcular el total
-$productos_carrito = $_SESSION['carrito'];git 
+$productos_carrito = $_SESSION['carrito'];
 $total = 0;
 
 foreach ($productos_carrito as $id_producto => $cantidad) {

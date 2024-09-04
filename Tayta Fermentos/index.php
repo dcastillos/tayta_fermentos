@@ -1,3 +1,16 @@
+<?php
+include('db.php'); // Conexión a la base de datos
+
+// Consulta para obtener los 4 últimos productos
+$query = "SELECT p.codigo, p.titulo, p.precio, p.descrpcion as descripcion, c.nombre AS categoria, i.nombre AS ruta_imagen
+          FROM producto p
+          LEFT JOIN categoria c ON p.codigoCategoria = c.codigo
+          LEFT JOIN imagenproducto i ON p.codigo = i.producto_codigo
+          ORDER BY p.codigo DESC
+          LIMIT 4";
+$result = $conn->query($query);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -21,63 +34,9 @@
   </head>
   <body>
 
-  	<div class="wrap">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-6 d-flex align-items-center">
-					<p class="mb-0 phone pl-md-2">
-						<a href="#" class="mr-2"><span class="fa fa-phone mr-1"></span> 968 204 147</a> 
-						<a href="contact.html"><span class="fa fa-paper-plane mr-1"></span> contacto@taytafermentos.com.pe</a>
-					</p>
-				</div>
-				<div class="col-md-6 d-flex justify-content-md-end">
-					<div class="social-media mr-4">
-						<p class="mb-0 d-flex">
-							<a href="#" class="d-flex align-items-center justify-content-center"><span class="fa fa-facebook"><i class="sr-only">Facebook</i></span></a>
-							<a href="#" class="d-flex align-items-center justify-content-center"><span class="fa fa-twitter"><i class="sr-only">Twitter</i></span></a>
-							<a href="#" class="d-flex align-items-center justify-content-center"><span class="fa fa-instagram"><i class="sr-only">Instagram</i></span></a>
-						</p>
-					</div>
-					<div class="reg">
-						<p class="mb-0"><a href="login.html" ></i>Iniciar sesion</a></p>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-    
-	<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-	    <div class="container">
-	      <a class="navbar-brand" href="index.html"><img src="images/LogoSinFondo.png" width="200" height="80"></a>
-	      	<div class="order-lg-last btn-group">
-				<a href="cart.html" class="btn-cart dropdown-toggle dropdown-toggle-split">
-					<img src="images/carrito_final.png" alt="carrito de compras" style="width: 24px; height: 24px ;">
-					
-				</a>
-          	
-        	</div>
-
-	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-	        <span class="oi oi-menu"></span> Menu
-	      </button>
-
-	      <div class="collapse navbar-collapse" id="ftco-nav">
-	        <ul class="navbar-nav ml-auto">
-	          <li class="nav-item"><a href="about.html" class="nav-link">Nosotros</a></li>
-	          <li class="nav-item dropdown">
-			  <li class="nav-item"><a href="product.php" class="nav-link">Productos</a></li>
-            </li>
-	          <li class="nav-item"><a href="blog.html" class="nav-link">Membresía</a></li> 
-	          <li class="nav-item"><a href="contact.html" class="nav-link">Contacto</a></li>
-			  
-	        </ul>
-	      </div>
-	    </div>
-	</nav>
+  <?php include('header.php'); ?>   
     <!-- END nav -->
 	 
-
-	
 	<!--carrusel-->
 	<div class="d-flex justify-content-center" style="margin-top: 93px; margin-bottom: 20px; margin-left: 30px; margin-right: 30px;">
 		<div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
@@ -148,100 +107,58 @@
     		</div>
     	</div>
     </section>
+	
 	<section class="ftco-section">
 		<div class="container">
 			<div class="row justify-content-center pb-5">
-				  <div class="col-md-7 heading-section text-center ftco-animate">
-					  <h2>Los preferidos del mes</h2>
-				  </div>
+				<div class="col-md-7 heading-section text-center ftco-animate">
+					<h2>Los preferidos del mes</h2>
+				</div>
 			</div>
 			<div class="row">
+				<?php
+				if ($result && $result->num_rows > 0):
+					while ($row = $result->fetch_assoc()):
+				?>
 				<div class="col-md-3 d-flex">
 					<div class="product ftco-animate">
-						<div class="img d-flex align-items-center justify-content-center" style="background-image: url(images/Chicha\ morada.png); background-size: contain;">
+						<div class="img d-flex align-items-center justify-content-center" style="background-image: url(<?php echo $row['ruta_imagen']; ?>); background-size: contain;">
 							<div class="desc">
 								<p class="meta-prod d-flex">
-									<a href="#" class="d-flex align-items-center justify-content-center"><span class="flaticon-shopping-bag"></span></a>
-									<a href="#" class="d-flex align-items-center justify-content-center"><span class="flaticon-visibility"></span></a>
+									<a href="cart.php?add=<?php echo $row['codigo']; ?>" class="d-flex align-items-center justify-content-center"><span class="flaticon-shopping-bag"></span></a>
+									<a href="product-single.php?id=<?php echo $row['codigo']; ?>" class="d-flex align-items-center justify-content-center"><span class="flaticon-visibility"></span></a>
 								</p>
 							</div>
 						</div>
 						<div class="text text-center">
-							<span class="sale">Oferta del mes</span>
-							<span class="category">Bebidas</span>
-							<h2>Chicha morada</h2>
-							<p class="mb-0"><span class="price price-sale">$0.00</span> <span class="price">$0.00</span></p>
+							<span class="sale">Oferta del mes</span> 
+							<span class="category"><?php echo $row['categoria']; ?></span>
+							<h2><?php echo $row['titulo']; ?></h2>
+							<p class="mb-0">
+								<span class="price price-sale">$<?php echo number_format($row['precio'], 2); ?></span>
+							</p>
 						</div>
 					</div>
 				</div>
-				<div class="col-md-3 d-flex">
-					<div class="product ftco-animate">
-						<div class="img d-flex align-items-center justify-content-center" style="background-image: url(images/Champanbucha.png);background-size: contain;">
-							<div class="desc">
-								<p class="meta-prod d-flex">
-									<a href="#" class="d-flex align-items-center justify-content-center"><span class="flaticon-shopping-bag"></span></a>
-									<a href="#" class="d-flex align-items-center justify-content-center"><span class="flaticon-visibility"></span></a>
-								</p>
-							</div>
-						</div>
-						<div class="text text-center">
-							<span class="seller">El preferido</span>
-							<span class="category">Gin</span>
-							<h2>Champanbucha</h2>
-							<span class="price">$0.00</span>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-3 d-flex">
-					<div class="product ftco-animate">
-						<div class="img d-flex align-items-center justify-content-center" style="background-image: url(images/Fresa\ y\ muña.png); background-size: contain;">
-							<div class="desc">
-								<p class="meta-prod d-flex">
-									<a href="#" class="d-flex align-items-center justify-content-center"><span class="flaticon-shopping-bag"></span></a>
-									<a href="#" class="d-flex align-items-center justify-content-center"><span class="flaticon-visibility"></span></a>
-								</p>
-							</div>
-						</div>
-						<div class="text text-center">
-							<span class="new">Nuevo producto</span>
-							<span class="category">Kombucha</span>
-							<h2>Fresa y Muña</h2>
-							<span class="price">$0.00</span>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-3 d-flex">
-					<div class="product ftco-animate">
-						<div class="img d-flex align-items-center justify-content-center" style="background-image: url(images/Cafe.png); background-size: contain;">
-							<div class="desc">
-								<p class="meta-prod d-flex">
-									<a href="#" class="d-flex align-items-center justify-content-center"><span class="flaticon-shopping-bag"></span></a>
-									<a href="#" class="d-flex align-items-center justify-content-center"><span class="flaticon-visibility"></span></a>
-								</p>
-							</div>
-						</div>
-						<div class="text text-center">
-							<span class="recomend">El recomendado</span>
-							<span class="category">Kombucha</span>
-							<h2>Cafe</h2>
-							<span class="price">$0.00</span>
-						</div>
-					</div>
-				</div>
+				<?php
+					endwhile;
+				else:
+					echo '<p>No hay productos disponibles.</p>';
+				endif;
+				?>
+			</div>
 
-				<div class="container">
-					<div class="row justify-content-center">
-						<div class="col-md-6 col-lg-4">
-							<a href="product.html" class="btn btn-primary d-block text-center">
-								Todos nuestros productos 
-							</a>
-						</div>
+			<div class="container">
+				<div class="row justify-content-center">
+					<div class="col-md-6 col-lg-4">
+						<a href="product.php" class="btn btn-primary d-block text-center">
+							Todos nuestros productos 
+						</a>
 					</div>
 				</div>
 			</div>
 		</div>
-	</section>
-	    
+	</section>    
 
     <section class="ftco-section ftco-no-pb">
 			<div class="container">
@@ -362,6 +279,7 @@
         </div>
       </div>
     </section>
+
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
 	<a href="https://wa.me/968204147" target="_blank" class="whatsapp">

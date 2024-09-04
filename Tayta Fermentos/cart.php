@@ -13,12 +13,11 @@ if (isset($_GET['add'])) {
     
     // Verificar si el producto ya está en el carrito
     if (isset($_SESSION['carrito'][$id_producto])) {
-        $_SESSION['carrito'][$id_producto]++; // Incrementar la cantidad
+        $_SESSION['carrito'][$id_producto]++; 
     } else {
-        $_SESSION['carrito'][$id_producto] = 1; // Agregar producto al carrito con cantidad 1
+        $_SESSION['carrito'][$id_producto] = 1; 
     }
 
-    // Redireccionar de nuevo a la página del carrito después de agregar
     header('Location: cart.php');
     exit;
 }
@@ -31,33 +30,15 @@ if (isset($_POST['update_quantity'])) {
         }
     }
 
-    // Redireccionar de nuevo a la página del carrito después de actualizar
     header('Location: cart.php');
     exit;
 }
 
-// Inicializar variable de descuento
+$total = 0;
 $descuento = 0;
+$error_cupon = '';
 
-// Manejar la validación del cupón
-if (isset($_POST['aplicar_cupon'])) {
-    $codigo_cupon = $_POST['codigo_cupon'];
-
-    // Consulta para verificar si el cupón es válido
-    $query_cupon = "SELECT * FROM cupon WHERE codigo = '$codigo_cupon' AND expiracion >= NOW()";
-    $result_cupon = $conn->query($query_cupon);
-
-    if ($result_cupon && $result_cupon->num_rows > 0) {
-        $cupon = $result_cupon->fetch_assoc();
-        $descuento = $cupon['descuento']; // Suponiendo que el campo 'descuento' contiene el valor de descuento en porcentaje
-    } else {
-        $error = "Cupón inválido o expirado.";
-    }
-}
-
-// Obtener productos del carrito desde la sesión
 $productos_carrito = $_SESSION['carrito'];
-$total = 0; // Variable para el total del carrito
 
 ?>
 <!DOCTYPE html>
@@ -86,11 +67,11 @@ $total = 0; // Variable para el total del carrito
   <body>
 
   <?php include('header.php'); ?>   
-    <!-- END nav -->
+    <!-- END nav 
 	<section class="hero-wrap hero-wrap-2" style="background-image: url('images/Fondo_blanco.jpg');" data-stellar-background-ratio="0.5">
       
 	</section>
-    
+    -->
 
     <section class="ftco-section">
 		<div class="container">
@@ -130,7 +111,7 @@ $total = 0; // Variable para el total del carrito
 										</label>
 									</td>
 									<td>
-										<div class="img" style="background-image: url(images/<?php echo $row['ruta_imagen']; ?>); background-size: contain;"></div>
+										<div class="img" style="background-image: url(<?php echo $row['ruta_imagen']; ?>); background-size: contain;"></div>
 									</td>
 									<td>
 										<div class="email">
@@ -160,6 +141,36 @@ $total = 0; // Variable para el total del carrito
 				</div>
 			</div>
 
+			<?php
+
+			// Verificar si se ha ingresado un cupón
+			if (isset($_POST['aplicar_cupon']) && !empty($_POST['codigo_cupon'])) {
+				$codigo_cupon = $_POST['codigo_cupon'];
+
+				// Buscar el cupón en la base de datos
+				$query_cupon = "SELECT * FROM cupon WHERE nombre = '$codigo_cupon' AND fechaExpiracion > NOW()";
+				$result_cupon = $conn->query($query_cupon);
+
+				if ($result_cupon && $result_cupon->num_rows > 0) {
+					$cupon = $result_cupon->fetch_assoc();
+
+					// Verificar si el monto total del carrito cumple con el monto mínimo del cupón
+					if ($total >= $cupon['montoMinimo']) {
+						// Aplicar el descuento basado en el tipo de cupón
+						if ($cupon['tipo'] == 'fijo') {
+							$descuento = $cupon['valor'];
+						} elseif ($cupon['tipo'] == 'porcentaje') {
+							$descuento = ($cupon['valor'] / 100) * $total;
+						}
+					} else {
+						$error_cupon = "El total del carrito no cumple con el monto mínimo de S/ " . number_format($cupon['montoMinimo'], 2);
+					}
+				} else {
+					$error_cupon = "Cupón inválido o expirado.";
+				}
+			}
+
+			?>
 			<!-- Sección de cupones y total en la misma fila -->
 			<div class="row justify-content-end">
 				<!-- Sección para ingresar cupones -->
@@ -173,8 +184,8 @@ $total = 0; // Variable para el total del carrito
 							</div>
 							<button type="submit" name="aplicar_cupon" class="btn btn-primary py-3 px-4">Aplicar Cupón</button>
 						</form>
-						<?php if (isset($error)): ?>
-							<p class="text-danger mt-2"><?php echo $error; ?></p>
+						<?php if ($error_cupon): ?>
+							<p class="text-danger mt-2"><?php echo $error_cupon; ?></p>
 						<?php endif; ?>
 					</div>
 				</div>
