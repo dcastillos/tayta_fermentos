@@ -29,7 +29,7 @@
             <div class="row justify-content-center mb-5">
                 <div class="col-md-8 text-center">
                     <h2 class="font-weight-bold mb-4">Promociones y Campañas</h2>
-                    <p>Explora nuestras últimas promociones y campañas exclusivas, disponibles por tiempo limitado.</p>
+                    <p>Explora nuestras últimas promociones y campañas exclusivas, disponibles por tiempo limitado prueba.</p>
                 </div>
             </div>
             <div class="row">
