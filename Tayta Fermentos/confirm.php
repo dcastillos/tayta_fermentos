@@ -69,15 +69,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $mail->isSMTP();
                         $mail->Host = 'smtp.gmail.com';
                         $mail->SMTPAuth = true;
-                        $mail->Username = 'dd.c.salvador89@gmail.com'; // Tu correo
-                        $mail->Password = 'D4n13l1t0#'; // Contraseña del correo
+                        $mail->Username = 'tu_gmail@gmail.com'; // Tu correo
+                        $mail->Password = 'tu_contraseña'; // Contraseña del correo
                         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                         $mail->Port = 587;
 
                         // Configuración del correo
-                        $mail->setFrom('dd.c.salvador89@gmail.com', 'Tayta Fermentos');
+                        $mail->setFrom('tu_gmail@gmail.com', 'Tayta Fermentos');
                         $mail->addAddress($pedido['email']); // Dirección de correo del cliente
-                        $mail->addReplyTo('dd.c.salvador89@gmail.com', 'Tayta Fermentos');
+                        $mail->addReplyTo('tu_gmail', 'Tayta Fermentos');
 
                         // Contenido del correo
                         $mail->isHTML(true);
