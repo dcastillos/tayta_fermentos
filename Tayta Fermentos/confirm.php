@@ -1,10 +1,11 @@
 <?php
 session_start();
-include('db.php'); // Conexión a la base de datos
+include('db.php'); 
 
-// Verificar si el formulario fue enviado correctamente
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Obtener datos del formulario
     $nombres = $_POST['firstname'] ?? '';
     $apellidos = $_POST['lastname'] ?? '';
     $email = $_POST['emailaddress'] ?? '';
@@ -16,9 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $total = $_POST['total'] ?? 0;
     $genero = "Masculino";
 
-    // Validar campos requeridos
     if ($nombres && $apellidos && $email && $celular && $direccion_cliente && $codigoDistrito && $metodo_pago) {
-        // Guardar el cliente en la tabla cliente
         $query_cliente = "INSERT INTO cliente (nombre, apellido, email, genero, dni, celular, direccion, codigoDistrito)
                   VALUES ('$nombres', '$apellidos', '$email', '$genero', '$dni', '$celular', '$direccion_cliente', $codigoDistrito)";
 
@@ -34,9 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $query_update = "UPDATE pedido SET numero = '$numero_pedido' WHERE codigo = $codigoPedido";
 
                 if ($conn->query($query_update)) {
-                    // Guardar los detalles del pedido en la tabla detallepedido
                     foreach ($_SESSION['carrito'] as $id_producto => $cantidad) {
-                        // Obtener detalles del producto
                         $query_producto = "SELECT titulo, precio FROM producto WHERE codigo = $id_producto";
                         $result_producto = $conn->query($query_producto);
                         if ($result_producto && $row = $result_producto->fetch_assoc()) {
@@ -48,8 +45,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $conn->query($query_detalle);
                         }
                     }
-
-                    // Obtener los detalles para mostrar en la confirmación
                     $query_pedido_confirm = "SELECT p.numero, p.fecha, p.direccion, c.nombre, c.apellido, p.transaccionCodigo
                                             FROM pedido p
                                             JOIN cliente c ON p.codigoCliente = c.codigo
@@ -62,8 +57,79 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     WHERE dp.pedido_codigo = $codigoPedido";
                     $result_detalles = $conn->query($query_detalles);
 
-                    // Limpiar el carrito después de procesar la orden
                     $_SESSION['carrito'] = [];
+
+                    require 'libs/PHPMailer/src/Exception.php';
+                    require 'libs/PHPMailer/src/PHPMailer.php';
+                    require 'libs/PHPMailer/src/SMTP.php';
+
+                    $mail = new PHPMailer(true);
+
+                    try {
+                        $mail->isSMTP();
+                        $mail->Host = 'smtp.gmail.com';
+                        $mail->SMTPAuth = true;
+                        $mail->Username = 'dd.c.salvador89@gmail.com'; // Tu correo
+                        $mail->Password = 'D4n13l1t0#'; // Contraseña del correo
+                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                        $mail->Port = 587;
+
+                        // Configuración del correo
+                        $mail->setFrom('dd.c.salvador89@gmail.com', 'Tayta Fermentos');
+                        $mail->addAddress($pedido['email']); // Dirección de correo del cliente
+                        $mail->addReplyTo('dd.c.salvador89@gmail.com', 'Tayta Fermentos');
+
+                        // Contenido del correo
+                        $mail->isHTML(true);
+                        $mail->Subject = 'Confirmación de tu pedido en Tayta Fermentos';
+                        $mail->Body    = '
+                        <h2>¡Gracias por tu compra, ' . $pedido['nombre'] . '!</h2>
+                        <p>Tu pedido ha sido procesado exitosamente.</p>
+                        <p>Número de Pedido: <strong>' . $pedido['numero'] . '</strong></p>
+                        <h4>Resumen de tu Compra</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio Unitario</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>';
+
+                        $total = 0;
+                        while ($detalle = $result_detalles->fetch_assoc()) {
+                            $subtotal = $detalle['cantidad'] * $detalle['precioUnitario'];
+                            $total += $subtotal;
+                            $mail->Body .= '
+                            <tr>
+                                <td>' . $detalle['descripcion'] . '</td>
+                                <td>' . $detalle['cantidad'] . '</td>
+                                <td>S/ ' . number_format($detalle['precioUnitario'], 2) . '</td>
+                                <td>S/ ' . number_format($subtotal, 2) . '</td>
+                            </tr>';
+                        }
+
+                        $mail->Body .= '
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="3" style="text-align: right;">Total</th>
+                                    <th>S/ ' . number_format($total, 2) . '</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <p>Método de Pago: <strong>' . $pedido['transaccionCodigo'] . '</strong></p>
+                        <p>Dirección de Envío: <strong>' . $pedido['direccion'] . '</strong></p>';
+
+                        // Enviar el correo
+                        $mail->send();
+                        echo 'El correo de confirmación ha sido enviado correctamente.';
+                    } catch (Exception $e) {
+                        echo "Hubo un error al enviar el correo: {$mail->ErrorInfo}";
+                    }
+
                 } else {
                     echo "Error al actualizar el número de pedido: " . $conn->error;
                 }
@@ -83,6 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo "Error: No se recibieron datos del formulario.";
     exit;
 }
+
 ?>
 
 
@@ -196,6 +263,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
     </section>
+
 
     <?php include('footer.php'); ?>
 
