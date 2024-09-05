@@ -85,6 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -116,19 +117,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <div class="container">
         <div class="row no-gutters slider-text align-items-end justify-content-center">
           <div class="col-md-9 ftco-animate mb-5 text-center">
-          	<p class="breadcrumbs mb-0"><span class="mr-2"><a href="index.html">Home <i class="fa fa-chevron-right"></i></a></span> <span><a href="product.html">Checkout <i class="fa fa-chevron-right"></i></a></span> <span>Products Single <i class="fa fa-chevron-right"></i></span></p>
+          	<p class="breadcrumbs mb-0"><span class="mr-2"><a href="index.php">Home <i class="fa fa-chevron-right"></i></a></span> <span><a href="product.php">Checkout <i class="fa fa-chevron-right"></i></a></span> <span>Finalizado <i class="fa fa-chevron-right"></i></span></p>
             <h2 class="mb-0 bread">Pedido Finalizado</h2>
           </div>
         </div>
       </div>
     </section>
     
-
     <section class="ftco-section">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-8 text-center">
-                    <h2 class="mb-4">¡Gracias por tu compra, <?php echo $pedido['nombre']; ?>!</h2>
+                    <h2 class="mb-4">¡Gracias por tu compra, <?php echo $pedido['nombre'] . ' ' . $pedido['apellido']; ?>!</h2>
                     <p>Tu pedido ha sido procesado exitosamente.</p>
                     <p class="lead">Número de Pedido: <strong><?php echo $pedido['numero']; ?></strong></p>
                     <hr class="mb-4">
@@ -170,7 +170,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </table>
 
                     <h4 class="mt-5">Detalles del Pago</h4>
-                    <p>Método de Pago: <strong><?php echo $pedido['transaccionCodigo']; ?></strong></p>
+                    <p>Método de Pago: <strong>
+                        <?php
+                        switch ($pedido['transaccionCodigo']) {
+                            case 'Transferencia':
+                                echo 'Transferencia Bancaria';
+                                break;
+                            case 'Tarjeta':
+                                echo 'Tarjeta de Crédito/Débito';
+                                break;
+                            case 'Yape/Plin':
+                                echo 'Yape / Plin';
+                                break;
+                            default:
+                                echo 'Método de Pago Desconocido';
+                        }
+                        ?>
+                    </strong></p>
                     <p>Dirección de Envío: <strong><?php echo $pedido['direccion']; ?></strong></p>
 
                     <div class="mt-5">
@@ -182,8 +198,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </section>
 
     <?php include('footer.php'); ?>
-    
-  
 
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>

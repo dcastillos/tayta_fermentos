@@ -1,23 +1,33 @@
 <?php
 session_start();
-include('db.php'); // Conexión a la base de datos
+include('db.php'); 
 
-// Inicializar carrito si no existe
 if (!isset($_SESSION['carrito'])) {
     $_SESSION['carrito'] = [];
 }
 
-// Verificar si hay datos del carrito para calcular el total
 $productos_carrito = $_SESSION['carrito'];
-$total = 0;
-
-foreach ($productos_carrito as $id_producto => $cantidad) {
-    $query = "SELECT titulo, precio FROM producto WHERE codigo = $id_producto";
-    $result = $conn->query($query);
-    if ($result && $row = $result->fetch_assoc()) {
-        $total += $row['precio'] * $cantidad;
+/*
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if ($_POST['optradio'] == 'Tarjeta') {
+        $_SESSION['checkout_data'] = [
+            'firstname' => $_POST['firstname'],
+            'lastname' => $_POST['lastname'],
+            'country' => $_POST['country'],
+            'streetaddress' => $_POST['streetaddress'],
+            'towncity' => $_POST['towncity'],
+            'postcodezip' => $_POST['postcodezip'],
+            'phone' => $_POST['phone'],
+            'emailaddress' => $_POST['emailaddress'],
+            'dni' => $_POST['dni'],
+            'codigoDistrito' => $_POST['codigoDistrito'],
+            'total' => $_POST['total'], 
+        ];
     }
 }
+*/
+$total = 0;
+
 ?>
 
 <!DOCTYPE html>
@@ -193,7 +203,7 @@ foreach ($productos_carrito as $id_producto => $cantidad) {
 									<div class="form-group">
 										<div class="col-md-12">
 											<div class="radio">
-												<label><input type="radio" name="optradio" value="Tarjeta" required> Tarjeta de Crédito/Débito</label>
+												<label><input type="radio" name="optradio" value="Tarjeta" id="payment-card" required> Tarjeta de Crédito/Débito</label>
 											</div>
 										</div>
 									</div>
@@ -211,7 +221,7 @@ foreach ($productos_carrito as $id_producto => $cantidad) {
 											</div>
 										</div>
 									</div>
-									<button type="submit" class="btn btn-primary py-3 px-4">Realizar Pedido</button>
+									<button type="submit" id="submit-button" class="btn btn-primary py-3 px-4">Realizar Pedido</button>
 								</div>
 							</div>
 						</div>
@@ -242,6 +252,7 @@ foreach ($productos_carrito as $id_producto => $cantidad) {
   <script src="js/jquery.animateNumber.min.js"></script>
   <script src="js/scrollax.min.js"></script>
   <script src="js/main.js"></script>
+  <script src="https://js.stripe.com/v3/"></script>
   <script>
 	document.getElementById('departamento').addEventListener('change', function() {
 		var departamentoId = this.value;
@@ -276,7 +287,41 @@ foreach ($productos_carrito as $id_producto => $cantidad) {
 			});
 	});
 
+	var stripe = Stripe('pk_test_51PvTtwApp0UZS128stCfkolxx2O7woHsUcWSCYEAO6z7kfMlbDDYYblEsamW00kUntDedQvV6q3tn1MI26xbqS4l00xXJ0FCPI');
 
+    document.getElementById('submit-button').addEventListener('click', function(e) {
+        e.preventDefault(); 
+
+        var selectedPaymentMethod = document.querySelector('input[name="optradio"]:checked').value;
+
+        if (selectedPaymentMethod === 'Tarjeta') {
+            fetch('create_checkout_session.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    total: <?php echo $total; ?>
+                })
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(session) {
+                return stripe.redirectToCheckout({ sessionId: session.id });
+            })
+            .then(function(result) {
+                if (result.error) {
+                    alert(result.error.message);
+                }
+            })
+            .catch(function(error) {
+                console.error('Error al crear la sesión de pago:', error);
+            });
+        } else {
+            document.querySelector('.billing-form').submit();
+        }
+    });
   </script>
   </body>
 </html>
