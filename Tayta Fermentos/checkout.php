@@ -121,62 +121,64 @@ $total = 0;
 									<div class="w-100"></div>
 									<div class="col-md-12">
 										<div class="form-group">
-											<label for="country">País</label>
-											<div class="select-wrap">
-												<div class="icon"><span class="ion-ios-arrow-down"></span></div>
-												<select name="country" class="form-control" required>
-													<option value="Perú">Perú</option>
-													<!-- Otros países si es necesario -->
+											<label for="tipo_compra">Tipo de Compra</label>
+											<select name="tipo_compra" id="tipo_compra" class="form-control" required>
+												<option value="retiro">Retiro en tienda</option>
+												<option value="delivery">Delivery</option>												
+											</select>
+										</div>
+									</div>
+									
+									<div class="w-100"></div>
+									<div id="campos_direccion" class="row">
+										<div class="col-md-4">
+											<div class="form-group">
+												<label for="departamento">Departamento</label>
+												<select name="departamento" id="departamento" class="form-control" required>
+													<option value="">Seleccione</option>
+													<?php
+													$query_departamentos = "SELECT codigo, nombre FROM departamento";
+													$result_departamentos = $conn->query($query_departamentos);
+													while ($row = $result_departamentos->fetch_assoc()):
+													?>
+													<option value="<?php echo $row['codigo']; ?>"><?php echo $row['nombre']; ?></option>
+													<?php endwhile; ?>
 												</select>
 											</div>
 										</div>
-									</div>
-									<div class="w-100"></div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label for="streetaddress">Dirección</label>
-											<input type="text" class="form-control" name="streetaddress" required>
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<input type="text" class="form-control" placeholder="Apartamento, suite, unidad etc: (opcional)">
-										</div>
-									</div>
-									<div class="w-100"></div>
-									<div class="col-md-4">
-										<div class="form-group">
-											<label for="departamento">Departamento</label>
-											<select name="departamento" id="departamento" class="form-control" required>
-												<option value="">Seleccione</option>
-												<?php
-												$query_departamentos = "SELECT codigo, nombre FROM departamento";
-												$result_departamentos = $conn->query($query_departamentos);
-												while ($row = $result_departamentos->fetch_assoc()):
-												?>
-												<option value="<?php echo $row['codigo']; ?>"><?php echo $row['nombre']; ?></option>
-												<?php endwhile; ?>
-											</select>
-										</div>
-									</div>
 
-									<div class="col-md-4">
-										<div class="form-group">
-											<label for="provincia">Provincia</label>
-											<select name="provincia" id="provincia" class="form-control" required>
-												<option value="">Seleccione</option>
-											</select>
+										<div class="col-md-4">
+											<div class="form-group">
+												<label for="provincia">Provincia</label>
+												<select name="provincia" id="provincia" class="form-control" required>
+													<option value="">Seleccione</option>
+												</select>
+											</div>
+										</div>
+
+										<div class="col-md-4">
+											<div class="form-group">
+												<label for="distrito">Distrito</label>
+												<select name="distrito" id="distrito" class="form-control" required>
+													<option value="">Seleccione</option>
+												</select>
+											</div>
+										</div>
+
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="streetaddress">Dirección</label>
+												<input type="text" class="form-control" name="streetaddress" required>
+											</div>
+										</div>
+
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="streetreference">Referencia</label>
+												<input type="text" class="form-control" name="streetreference" placeholder="Apartamento, suite, unidad etc: (opcional)">
+											</div>
 										</div>
 									</div>
-
-									<div class="col-md-4">
-										<div class="form-group">
-											<label for="distrito">Distrito</label>
-											<select name="distrito" id="distrito" class="form-control" required>
-												<option value="">Seleccione</option>
-											</select>
-										</div>
-									</div>									
 								</div>
 							</div>
 

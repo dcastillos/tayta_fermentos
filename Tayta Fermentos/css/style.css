@@ -10063,3 +10063,19 @@ body{
 #cart-sidebar h3 {
   text-align: center;
 }
+
+#campos_direccion .form-group {
+  margin-bottom: 0.5rem; 
+}
+
+#campos_direccion .col-md-4,
+#campos_direccion .col-md-6 {
+  padding-right: 10px; 
+}
+
+@media (max-width: 767.98px) {
+  #campos_direccion .col-md-4,
+  #campos_direccion .col-md-6 {
+      padding-right: 0;
+  }
+}

@@ -264,33 +264,55 @@ function removeFromCart(productId) {
 
 // Script para actualizar el costo de delivery según el distrito seleccionado
 $(document).ready(function() {
-	$('#distrito').on('change', function() {
-		var distritoCodigo = $(this).val();
-		if (distritoCodigo) {
-			$.ajax({
-				url: 'get_delivery_cost.php',
-				type: 'POST',
-				data: {codigoDistrito: distritoCodigo},
-				success: function(response) {
-					$('#costo_delivery').text('S/ ' + parseFloat(response).toFixed(2));
-					updateTotal(); 
-				},
-				error: function() {
-					alert('Error al calcular el costo de delivery');
-				}
-			});
-		} else {
-			$('#costo_delivery').text('S/ 0.00');
-			updateTotal();
-		}
-	});
+    $('#tipo_compra').on('change', function() {
+        var tipoCompra = $(this).val();
 
-	function updateTotal() {
-		var subtotal = parseFloat($('#subtotal').data('subtotal'));
-		var delivery = parseFloat($('#costo_delivery').text().replace('S/ ', ''));
-		var descuento = parseFloat($('#descuento').text().replace('S/ ', ''));
-		var total = subtotal + delivery - descuento;
-		$('#total').text('S/ ' + total.toFixed(2));
-		$('input[name="total"]').val(total); 
-	}
+        if (tipoCompra === 'retiro') {
+            $('#campos_direccion').hide();
+            $('#departamento, #provincia, #distrito, [name="streetaddress"]').prop('required', false);
+            $('#costo_delivery').text('S/ 0.00');
+        } else {
+            $('#campos_direccion').show();
+            $('#departamento, #provincia, #distrito, [name="streetaddress"]').prop('required', true);
+            updateDeliveryCost();
+        }
+        updateTotal(); 
+    });
+
+    function updateDeliveryCost() {
+        var distritoCodigo = $('#distrito').val();
+        if (distritoCodigo) {
+            $.ajax({
+                url: 'get_delivery_cost.php',
+                type: 'POST',
+                data: {codigoDistrito: distritoCodigo},
+                success: function(response) {
+                    $('#costo_delivery').text('S/ ' + parseFloat(response).toFixed(2));
+                    updateTotal(); 
+                },
+                error: function() {
+                    alert('Error al calcular el costo de delivery');
+                }
+            });
+        } else {
+            $('#costo_delivery').text('S/ 0.00');
+            updateTotal();
+        }
+    }
+
+    function updateTotal() {
+        var subtotal = parseFloat($('#subtotal').data('subtotal'));
+        var delivery = parseFloat($('#costo_delivery').text().replace('S/ ', ''));
+        var descuento = parseFloat($('#descuento').text().replace('S/ ', ''));
+        var total = subtotal + delivery - descuento;
+        $('#total').text('S/ ' + total.toFixed(2));
+        $('input[name="total"]').val(total); 
+    }
+
+    // Inicialmente esconder los campos si "Retiro en tienda" es seleccionado por defecto
+    if ($('#tipo_compra').val() === 'retiro') {
+        $('#campos_direccion').hide();
+        $('#departamento, #provincia, #distrito, [name="streetaddress"]').prop('required', false);
+        $('#costo_delivery').text('S/ 0.00');
+    }
 });

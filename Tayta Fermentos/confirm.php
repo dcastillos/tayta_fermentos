@@ -11,21 +11,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['emailaddress'] ?? '';
     $dni = $_POST['dni'] ?? '';
     $celular = $_POST['phone'] ?? '';
+    $tipo_compra = $_POST['tipo_compra'] ?? '';
     $direccion_cliente = $_POST['streetaddress'] ?? '';
-    $codigoDistrito = $_POST['distrito'] ?? '';
+    $codigoDistrito = $_POST['distrito'] ?? 1;
     $metodo_pago = $_POST['optradio'] ?? '';
     $total = $_POST['total'] ?? 0;
     $genero = "Masculino";
 
-    if ($nombres && $apellidos && $email && $celular && $direccion_cliente && $codigoDistrito && $metodo_pago) {
+    if ($nombres && $apellidos && $email && $celular && $metodo_pago) {
+        if ($tipo_compra === 'delivery' && (!$direccion_cliente || !$codigoDistrito)) {
+            echo "Error: Por favor, completa todos los campos de dirección para delivery.";
+            exit;
+        }
         $query_cliente = "INSERT INTO cliente (nombre, apellido, email, genero, dni, celular, direccion, codigoDistrito)
-                  VALUES ('$nombres', '$apellidos', '$email', '$genero', '$dni', '$celular', '$direccion_cliente', $codigoDistrito)";
+                  VALUES ('$nombres', '$apellidos', '$email', '$genero', '$dni', '$celular', '$direccion_cliente', ". ($codigoDistrito ? $codigoDistrito : 'NULL') .")";
 
         if ($conn->query($query_cliente)) {
             $codigoCliente = $conn->insert_id;
 
             $query_pedido = "INSERT INTO pedido (fecha, direccion, observacion, codigoCliente, codigoDistrito, cupon_codigo, transaccionCodigo)
-                             VALUES (NOW(), '$direccion_cliente', '', $codigoCliente, $codigoDistrito, 1, '$metodo_pago')";
+                             VALUES (NOW(), '$direccion_cliente', '', $codigoCliente, ". ($codigoDistrito ? $codigoDistrito : 'NULL') .", 1, '$metodo_pago')";
 
             if ($conn->query($query_pedido)) {
                 $codigoPedido = $conn->insert_id;
@@ -69,15 +74,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $mail->isSMTP();
                         $mail->Host = 'smtp.gmail.com';
                         $mail->SMTPAuth = true;
-                        $mail->Username = 'tu_gmail@gmail.com'; // Tu correo
-                        $mail->Password = 'tu_contraseña'; // Contraseña del correo
+                        $mail->Username = 'mi_correo@gmail.com'; // Tu correo
+                        $mail->Password = ''; // Contraseña del correo
                         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                         $mail->Port = 587;
 
                         // Configuración del correo
-                        $mail->setFrom('tu_gmail@gmail.com', 'Tayta Fermentos');
+                        $mail->setFrom('mi_correo@gmail.com', 'Tayta Fermentos');
                         $mail->addAddress($pedido['email']); // Dirección de correo del cliente
-                        $mail->addReplyTo('tu_gmail', 'Tayta Fermentos');
+                        $mail->addReplyTo('mi_correo@gmail.com', 'Tayta Fermentos');
 
                         // Contenido del correo
                         $mail->isHTML(true);
