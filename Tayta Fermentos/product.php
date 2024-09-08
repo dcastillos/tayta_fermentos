@@ -10,7 +10,7 @@ $result_categoria = $conn->query($query_categoria);
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Tayta Fermentos</title>
+    <title>Productos - Tayta Fermentos</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
@@ -40,28 +40,48 @@ $result_categoria = $conn->query($query_categoria);
                 <div class="col-md-9">
                     <div class="row mb-4">
                         <div class="col-md-12 d-flex justify-content-between align-items-center">
-                            <!-- Select de categorías dinámico -->
-                            <select class="selectpicker" multiple title="Seleccione">
-                                <?php while ($row = $result_categoria->fetch_assoc()): ?>
-                                    <option><?php echo $row['nombre']; ?></option>
-                                <?php endwhile; ?>
-                            </select>
+                            <!-- Select para ordenar productos -->
+                            <form id="ordenarForm" method="GET" class="form-inline">
+                                <label for="ordenar" class="mr-2">Ordenar por:</label>
+                                <select name="ordenar" id="ordenar" class="form-control" onchange="document.getElementById('ordenarForm').submit();">
+                                    <option value="">Seleccione</option>
+                                    <option value="precio_mayor" <?php echo (isset($_GET['ordenar']) && $_GET['ordenar'] == 'precio_mayor') ? 'selected' : ''; ?>>Precio de Mayor a Menor</option>
+                                    <option value="precio_menor" <?php echo (isset($_GET['ordenar']) && $_GET['ordenar'] == 'precio_menor') ? 'selected' : ''; ?>>Precio de Menor a Mayor</option>
+                                    <option value="a_z" <?php echo (isset($_GET['ordenar']) && $_GET['ordenar'] == 'a_z') ? 'selected' : ''; ?>>Orden de A a Z</option>
+                                    <option value="z_a" <?php echo (isset($_GET['ordenar']) && $_GET['ordenar'] == 'z_a') ? 'selected' : ''; ?>>Orden de Z a A</option>
+                                </select>
+                            </form>
                         </div>
                     </div>
 
                     <div class="row">
                         <?php
 
-                            $categoria_id = isset($_GET['categoria']) ? (int)$_GET['categoria'] : 0;
+                            $orden = $_GET['ordenar'] ?? '';
+                            $orderBy = '';
+                            switch ($orden) {
+                                case 'precio_mayor':
+                                    $orderBy = 'ORDER BY p.precio DESC';
+                                    break;
+                                case 'precio_menor':
+                                    $orderBy = 'ORDER BY p.precio ASC';
+                                    break;
+                                case 'a_z':
+                                    $orderBy = 'ORDER BY p.titulo ASC';
+                                    break;
+                                case 'z_a':
+                                    $orderBy = 'ORDER BY p.titulo DESC';
+                                    break;
+                                default:
+                                    $orderBy = '';
+                                    break;
+                            }
 
                             $query_productos = "SELECT p.codigo, p.titulo, p.precio, p.descrpcion, i.nombre as ruta, c.nombre AS categoria, p.slug 
                                                 FROM producto p
                                                 LEFT JOIN imagenproducto i ON p.codigo = i.producto_codigo
-                                                LEFT JOIN categoria c ON p.codigoCategoria = c.codigo";
-                            if ($categoria_id > 0) {
-                                $query_productos .= " WHERE p.codigoCategoria = $categoria_id";
-                            }
-
+                                                LEFT JOIN categoria c ON p.codigoCategoria = c.codigo 
+                                                $orderBy";                            
                             $result_productos = $conn->query($query_productos);
                         ?>
                         <?php while ($row = $result_productos->fetch_assoc()): ?>

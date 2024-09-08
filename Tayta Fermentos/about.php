@@ -113,6 +113,19 @@
 		<img src="images/whats.png" alt="WhatsApp" class="whatsapp-icon">
 	   </a>
 
+	<!-- Barra lateral del carrito -->
+    <div id="cart-sidebar">
+        <span class="closebtn" onclick="closeCartSidebar()">&times;</span>
+        <h3>Tu Carrito</h3>
+        <div id="cart-items">
+            <?php include 'cart_items.php'; ?>
+        </div>
+        <div class="cart-footer">
+            <a href="cart.php" class="btn btn-secondary">Ver Carrito</a>
+            <a href="checkout.php" class="btn btn-primary">Proceder al Pago</a>
+        </div>
+    </div>
+	
 	<?php include('footer.php'); ?>  
     
   

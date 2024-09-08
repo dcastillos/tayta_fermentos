@@ -1,6 +1,9 @@
 <?php
-session_start(); 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
+$usuario_nombre = $_SESSION['usuario_nombre'] ?? null;
 // Calcular la cantidad total de productos en el carrito
 $total_cantidad_carrito = 0;
 if (isset($_SESSION['carrito'])) {
@@ -24,12 +27,19 @@ if (isset($_SESSION['carrito'])) {
                 <div class="social-media mr-4">
                     <p class="mb-0 d-flex">
                         <a href="https://www.facebook.com/taytafermentos/" class="d-flex align-items-center justify-content-center"><span class="fa fa-facebook"><i class="sr-only">Facebook</i></span></a>
-                        
                         <a href="https://www.instagram.com/taytafermentos/?hl=es" class="d-flex align-items-center justify-content-center"><span class="fa fa-instagram"><i class="sr-only">Instagram</i></span></a>
                     </p>
                 </div>
                 <div class="reg">
-                    <p class="mb-0"><a href="login.php">Iniciar sesión</a></p>
+                    <p class="mb-0">
+                        <?php if ($usuario_nombre): ?>
+                            <span>Hola, <?php echo htmlspecialchars($usuario_nombre); ?> | </span>
+                            <a href="dashboard.php">Mi Cuenta</a> | 
+                            <a href="logout.php">Salir</a>
+                        <?php else: ?>
+                            <a href="login.php">Iniciar sesión</a>
+                        <?php endif; ?>
+                    </p>
                 </div>
             </div>
         </div>
@@ -43,7 +53,6 @@ if (isset($_SESSION['carrito'])) {
         <div class="order-lg-last btn-group">
             <button onclick="openCartSidebar()" class="btn-cart dropdown-toggle dropdown-toggle-split" style="border: none; background: none;">
                 <img src="images/carrito_final.png" alt="carrito de compras" style="width: 24px; height: 24px;">
-                <!-- Mostrar la cantidad total de productos en el carrito -->
                 <?php if (isset($total_cantidad_carrito) && $total_cantidad_carrito > 0): ?>
                     <span class="badge badge-pill badge-danger" style="position: relative; top: -10px; right: 10px;">
                         <?php echo $total_cantidad_carrito; ?>

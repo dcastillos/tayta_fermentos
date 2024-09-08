@@ -261,3 +261,36 @@ function removeFromCart(productId) {
         })
         .catch(error => console.error('Error al eliminar el producto:', error));
 }
+
+// Script para actualizar el costo de delivery según el distrito seleccionado
+$(document).ready(function() {
+	$('#distrito').on('change', function() {
+		var distritoCodigo = $(this).val();
+		if (distritoCodigo) {
+			$.ajax({
+				url: 'get_delivery_cost.php',
+				type: 'POST',
+				data: {codigoDistrito: distritoCodigo},
+				success: function(response) {
+					$('#costo_delivery').text('S/ ' + parseFloat(response).toFixed(2));
+					updateTotal(); 
+				},
+				error: function() {
+					alert('Error al calcular el costo de delivery');
+				}
+			});
+		} else {
+			$('#costo_delivery').text('S/ 0.00');
+			updateTotal();
+		}
+	});
+
+	function updateTotal() {
+		var subtotal = parseFloat($('#subtotal').data('subtotal'));
+		var delivery = parseFloat($('#costo_delivery').text().replace('S/ ', ''));
+		var descuento = parseFloat($('#descuento').text().replace('S/ ', ''));
+		var total = subtotal + delivery - descuento;
+		$('#total').text('S/ ' + total.toFixed(2));
+		$('input[name="total"]').val(total); 
+	}
+});

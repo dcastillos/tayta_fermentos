@@ -84,6 +84,41 @@ $total = 0;
 										</div>
 									</div>
 									<div class="w-100"></div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="phone">Celular</label>
+											<input type="text" class="form-control" name="phone" required>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="emailaddress">Correo</label>
+											<input type="email" class="form-control" name="emailaddress" required>
+										</div>
+									</div>
+									<div class="w-100"></div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="document">Tipo Documento</label>
+											<div class="select-wrap">
+												<div class="icon"><span class="ion-ios-arrow-down"></span></div>
+												<select name="document" class="form-control" required>
+													<option value="">Seleccione</option>
+													<option value="dni">DNI</option>
+													<option value="pasaporte">Pasaporte</option>
+													<option value="carnet">Carnet Extranjería</option>
+													<option value="ruc">RUC</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="dni">Número Doc.</label>
+											<input type="text" class="form-control" name="dni">
+										</div>
+									</div>
+									<div class="w-100"></div>
 									<div class="col-md-12">
 										<div class="form-group">
 											<label for="country">País</label>
@@ -141,27 +176,7 @@ $total = 0;
 												<option value="">Seleccione</option>
 											</select>
 										</div>
-									</div>
-									<div class="w-100"></div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label for="phone">Celular</label>
-											<input type="text" class="form-control" name="phone" required>
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label for="emailaddress">Correo</label>
-											<input type="email" class="form-control" name="emailaddress" required>
-										</div>
-									</div>
-									<div class="w-100"></div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label for="dni">DNI</label>
-											<input type="text" class="form-control" name="dni">
-										</div>
-									</div>
+									</div>									
 								</div>
 							</div>
 
@@ -170,24 +185,41 @@ $total = 0;
 								<!-- Total Compras -->
 								<div class="cart-detail cart-total p-3 p-md-4 mb-4">
 									<h3 class="billing-heading mb-4">Total Compras</h3>
-									<?php foreach ($productos_carrito as $id_producto => $cantidad):
+									<?php 
+									$subtotal = 0; 
+									$descuento = 0;
+									foreach ($productos_carrito as $id_producto => $cantidad):
 										// Obtener detalles del producto desde la base de datos
 										$query = "SELECT titulo, precio FROM producto WHERE codigo = $id_producto";
 										$result = $conn->query($query);
 										if ($result && $row = $result->fetch_assoc()):
-											$subtotal = $row['precio'] * $cantidad;
-											$total += $subtotal; ?>
+											$subtotal_producto = $row['precio'] * $cantidad;
+											$subtotal += $subtotal_producto; ?>
 											<p class="d-flex">
 												<span><?php echo $row['titulo']; ?> x <?php echo $cantidad; ?></span>
-												<span>S/ <?php echo number_format($subtotal, 2); ?></span>
+												<span>S/ <?php echo number_format($subtotal_producto, 2); ?></span>
 											</p>
 									<?php endif; endforeach; ?>
+									
+									<hr>
+									<p class="d-flex">
+										<span>Subtotal</span>
+										<span id="subtotal" data-subtotal="<?php echo $subtotal; ?>">S/ <?php echo number_format($subtotal, 2); ?></span>
+									</p>
+									<p class="d-flex">
+										<span>Delivery</span>
+										<span id="costo_delivery">S/ 0.00</span>
+									</p>
+									<p class="d-flex">
+										<span>Descuento</span>
+										<span id="descuento">S/ <?php echo number_format($descuento, 2); ?></span>
+									</p>
 									<hr>
 									<p class="d-flex total-price">
 										<span>Total</span>
-										<span>S/ <?php echo number_format($total, 2); ?></span>
+										<span id="total">S/ <?php echo number_format($subtotal - $descuento, 2); ?></span>
 									</p>
-									<input type="hidden" name="total" value="<?php echo $total; ?>">
+									<input type="hidden" name="total" value="<?php echo $subtotal - $descuento; ?>">
 								</div>
 
 								<!-- Métodos de Pago -->
@@ -287,6 +319,8 @@ $total = 0;
 			});
 	});
 
+
+	// Configuración para la pasarela de pagos de Stripe
 	var stripe = Stripe('pk_test_51PvTtwApp0UZS128stCfkolxx2O7woHsUcWSCYEAO6z7kfMlbDDYYblEsamW00kUntDedQvV6q3tn1MI26xbqS4l00xXJ0FCPI');
 
     document.getElementById('submit-button').addEventListener('click', function(e) {
@@ -322,6 +356,9 @@ $total = 0;
             document.querySelector('.billing-form').submit();
         }
     });
+
+
+	
   </script>
   </body>
 </html>

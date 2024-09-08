@@ -133,6 +133,19 @@
 		<a href="https://wa.me/1234567890?text=hello+123" target=”_blank” class="whatsapp-btn">
 			<i class="bi bi-whatsapp"></i>
 			</a>
+            
+<!-- Barra lateral del carrito -->
+<div id="cart-sidebar">
+    <span class="closebtn" onclick="closeCartSidebar()">&times;</span>
+    <h3>Tu Carrito</h3>
+    <div id="cart-items">
+        <?php include 'cart_items.php'; ?>
+    </div>
+    <div class="cart-footer">
+        <a href="cart.php" class="btn btn-secondary">Ver Carrito</a>
+        <a href="checkout.php" class="btn btn-primary">Proceder al Pago</a>
+    </div>
+</div>
 
 		<?php include('footer.php'); ?>  
 			  

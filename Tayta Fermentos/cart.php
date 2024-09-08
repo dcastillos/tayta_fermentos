@@ -1,17 +1,14 @@
 <?php
 session_start();
-include('db.php'); // Conexión a la base de datos
+include('db.php'); 
 
-// Inicializar carrito si no existe
 if (!isset($_SESSION['carrito'])) {
     $_SESSION['carrito'] = [];
 }
 
-// Capturar el ID del producto a agregar al carrito
 if (isset($_GET['add'])) {
     $id_producto = (int)$_GET['add'];
-    
-    // Verificar si el producto ya está en el carrito
+
     if (isset($_SESSION['carrito'][$id_producto])) {
         $_SESSION['carrito'][$id_producto]++; 
     } else {
@@ -22,11 +19,10 @@ if (isset($_GET['add'])) {
     exit;
 }
 
-// Capturar la actualización de cantidades
 if (isset($_POST['update_quantity'])) {
     foreach ($_POST['cantidad'] as $id_producto => $cantidad) {
         if (isset($_SESSION['carrito'][$id_producto])) {
-            $_SESSION['carrito'][$id_producto] = (int)$cantidad; // Actualizar la cantidad en la sesión
+            $_SESSION['carrito'][$id_producto] = (int)$cantidad; 
         }
     }
 
@@ -44,7 +40,7 @@ $productos_carrito = $_SESSION['carrito'];
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Tayta Fermentos</title>
+    <title>Mi Carrito - Tayta Fermentos</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
@@ -67,11 +63,6 @@ $productos_carrito = $_SESSION['carrito'];
   <body>
 
   <?php include('header.php'); ?>   
-    <!-- END nav 
-	<section class="hero-wrap hero-wrap-2" style="background-image: url('images/Fondo_blanco.jpg');" data-stellar-background-ratio="0.5">
-      
-	</section>
-    -->
 
     <section class="ftco-section">
 		<div class="container">
@@ -92,16 +83,14 @@ $productos_carrito = $_SESSION['carrito'];
 							</thead>
 							<tbody>
 								<?php
-								// Iterar sobre los productos en el carrito
 								foreach ($productos_carrito as $id_producto => $cantidad):
-									// Obtener detalles del producto desde la base de datos
 									$query = "SELECT titulo, precio, descrpcion as descripcion, i.nombre as ruta_imagen FROM producto p 
 											LEFT JOIN imagenproducto i ON p.codigo = i.producto_codigo
 											WHERE p.codigo = $id_producto";
 									$result = $conn->query($query);
 									if ($result && $row = $result->fetch_assoc()):
 										$subtotal = $row['precio'] * $cantidad;
-										$total += $subtotal; // Calcular el total del carrito
+										$total += $subtotal; 
 								?>
 								<tr class="alert" role="alert">
 									<td>
@@ -135,7 +124,6 @@ $productos_carrito = $_SESSION['carrito'];
 								<?php endif; endforeach; ?>
 							</tbody>
 						</table>
-						<!-- Botón para actualizar las cantidades -->
 						<button type="submit" name="update_quantity" class="btn btn-primary">Actualizar Carrito</button>
 					</form>
 				</div>
@@ -143,20 +131,16 @@ $productos_carrito = $_SESSION['carrito'];
 
 			<?php
 
-			// Verificar si se ha ingresado un cupón
 			if (isset($_POST['aplicar_cupon']) && !empty($_POST['codigo_cupon'])) {
 				$codigo_cupon = $_POST['codigo_cupon'];
 
-				// Buscar el cupón en la base de datos
 				$query_cupon = "SELECT * FROM cupon WHERE nombre = '$codigo_cupon' AND fechaExpiracion > NOW()";
 				$result_cupon = $conn->query($query_cupon);
 
 				if ($result_cupon && $result_cupon->num_rows > 0) {
 					$cupon = $result_cupon->fetch_assoc();
 
-					// Verificar si el monto total del carrito cumple con el monto mínimo del cupón
 					if ($total >= $cupon['montoMinimo']) {
-						// Aplicar el descuento basado en el tipo de cupón
 						if ($cupon['tipo'] == 'fijo') {
 							$descuento = $cupon['valor'];
 						} elseif ($cupon['tipo'] == 'porcentaje') {
@@ -218,6 +202,10 @@ $productos_carrito = $_SESSION['carrito'];
 		</div>
 	</section>
 
+	<a href="https://wa.me/968204147" target="_blank" class="whatsapp">
+        <img src="images/whats.png" alt="WhatsApp" class="whatsapp-icon">
+    </a>
+	
     <?php include('footer.php'); ?>
     
   
