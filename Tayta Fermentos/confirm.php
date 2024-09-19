@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 include('db.php'); 
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -24,18 +26,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
         $query_cliente = "INSERT INTO cliente (nombre, apellido, email, genero, dni, celular, direccion, codigoDistrito)
-                  VALUES ('$nombres', '$apellidos', '$email', '$genero', '$dni', '$celular', '$direccion_cliente', ". ($codigoDistrito ? $codigoDistrito : 'NULL') .")";
+                VALUES ('$nombres', '$apellidos', '$email', '$genero', '$dni', '$celular', '$direccion_cliente', ". ($codigoDistrito ? $codigoDistrito : 'NULL') .")";
 
         if ($conn->query($query_cliente)) {
             $codigoCliente = $conn->insert_id;
 
             $query_pedido = "INSERT INTO pedido (fecha, direccion, observacion, codigoCliente, codigoDistrito, cupon_codigo, transaccionCodigo)
-                             VALUES (NOW(), '$direccion_cliente', '', $codigoCliente, ". ($codigoDistrito ? $codigoDistrito : 'NULL') .", 1, '$metodo_pago')";
+                            VALUES (NOW(), '$direccion_cliente', '', $codigoCliente, ". ($codigoDistrito ? $codigoDistrito : 'NULL') .", 1, '$metodo_pago')";
 
             if ($conn->query($query_pedido)) {
                 $codigoPedido = $conn->insert_id;
                 $numero_pedido = 'PED-' . sprintf('%06d', $codigoPedido);
                 $query_update = "UPDATE pedido SET numero = '$numero_pedido' WHERE codigo = $codigoPedido";
+
+                if (isset($_FILES['constancia_pago']) && $_FILES['constancia_pago']['error'] === UPLOAD_ERR_OK) {
+                    $targetDir = "images/constancias/";
+                    $fileName = basename($_FILES["constancia_pago"]["name"]);
+                    $targetFilePath = $targetDir . $fileName;
+            
+                    if (move_uploaded_file($_FILES["constancia_pago"]["tmp_name"], $targetFilePath)) {
+                        //echo "Archivo subido correctamente a: " . $targetFilePath;
+            
+                        $query_pagos = "INSERT INTO pagos (pedido_codigo, metodo_pago, ruta_constancia) 
+                                        VALUES ($codigoPedido, 'Yape', '$targetFilePath')";
+            
+                        if ($conn->query($query_pagos)) {
+                            //echo "Información del pago guardada correctamente.";
+                        } else {
+                            echo "Error al guardar la información del pago: " . $conn->error;
+                        }
+                    } else {
+                        echo "Error en la subida. Ruta temporal: " . $_FILES["constancia_pago"]["tmp_name"];
+                        echo "Ruta destino: " . $targetFilePath;
+                    }
+                } else {
+                    $fileError = $_FILES['constancia_pago']['error'];
+                    echo "Error al subir el archivo. Código de error: " . $fileError;
+                }          
 
                 if ($conn->query($query_update)) {
                     foreach ($_SESSION['carrito'] as $id_producto => $cantidad) {
@@ -75,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $mail->Host = 'smtp.gmail.com';
                         $mail->SMTPAuth = true;
                         $mail->Username = 'mi_correo@gmail.com'; // Tu correo
-                        $mail->Password = ''; // Contraseña del correo
+                        $mail->Password = 'contrasena'; // Contraseña del correo
                         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                         $mail->Port = 587;
 
@@ -149,7 +176,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         echo "Error: Por favor, completa todos los campos requeridos.";
         exit;
-    }
+    }    
 } else {
     echo "Error: No se recibieron datos del formulario.";
     exit;

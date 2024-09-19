@@ -65,7 +65,7 @@ $total = 0;
 			<div class="row justify-content-center">
 				<div class="col-xl-12 ftco-animate">
 					<!-- Un solo formulario que incluye Datos de Facturación y Métodos de Pago -->
-					<form action="confirm.php" method="POST" class="billing-form">
+					<form action="confirm.php" method="POST" enctype="multipart/form-data" class="billing-form">
 						<div class="row">
 							<!-- Columna Izquierda: Formulario de Datos de Facturación -->
 							<div class="col-xl-6">
@@ -191,7 +191,6 @@ $total = 0;
 									$subtotal = 0; 
 									$descuento = 0;
 									foreach ($productos_carrito as $id_producto => $cantidad):
-										// Obtener detalles del producto desde la base de datos
 										$query = "SELECT titulo, precio FROM producto WHERE codigo = $id_producto";
 										$result = $conn->query($query);
 										if ($result && $row = $result->fetch_assoc()):
@@ -202,7 +201,7 @@ $total = 0;
 												<span>S/ <?php echo number_format($subtotal_producto, 2); ?></span>
 											</p>
 									<?php endif; endforeach; ?>
-									
+
 									<hr>
 									<p class="d-flex">
 										<span>Subtotal</span>
@@ -219,10 +218,11 @@ $total = 0;
 									<hr>
 									<p class="d-flex total-price">
 										<span>Total</span>
-										<span id="total">S/ <?php echo number_format($subtotal - $descuento, 2); ?></span>
+										<span id="total" data-total="<?php echo $subtotal - $descuento; ?>">S/ <?php echo number_format($subtotal - $descuento, 2); ?></span>
 									</p>
 									<input type="hidden" name="total" value="<?php echo $subtotal - $descuento; ?>">
 								</div>
+
 
 								<!-- Métodos de Pago -->
 								<div class="cart-detail p-3 p-md-4">
@@ -244,8 +244,17 @@ $total = 0;
 									<div class="form-group">
 										<div class="col-md-12">
 											<div class="radio">
-												<label><input type="radio" name="optradio" value="Yape/Plin" required> Yape / Plin</label>
+												<label><input type="radio" name="optradio" id="yapeOption" value="Yape" required> Yape / Plin</label>
 											</div>
+										</div>
+									</div>
+									<div id="yapeSection" style="display: none;">
+										<h4>Escanea el QR de Yape</h4>
+										<img src="images/qrcode-generado.png" alt="QR de Yape" style="width: 200px; height: 200px;">
+
+										<div class="form-group mt-4">
+											<label for="constancia_pago">Adjuntar constancia de pago</label>
+											<input type="file" name="constancia_pago" class="form-control-file" required>
 										</div>
 									</div>
 									<div class="form-group">
@@ -326,40 +335,40 @@ $total = 0;
 	var stripe = Stripe('pk_test_51PvTtwApp0UZS128stCfkolxx2O7woHsUcWSCYEAO6z7kfMlbDDYYblEsamW00kUntDedQvV6q3tn1MI26xbqS4l00xXJ0FCPI');
 
     document.getElementById('submit-button').addEventListener('click', function(e) {
-        e.preventDefault(); 
+		e.preventDefault(); 
 
-        var selectedPaymentMethod = document.querySelector('input[name="optradio"]:checked').value;
+		var selectedPaymentMethod = document.querySelector('input[name="optradio"]:checked').value;
 
-        if (selectedPaymentMethod === 'Tarjeta') {
-            fetch('create_checkout_session.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    total: <?php echo $total; ?>
-                })
-            })
-            .then(function(response) {
-                return response.json();
-            })
-            .then(function(session) {
-                return stripe.redirectToCheckout({ sessionId: session.id });
-            })
-            .then(function(result) {
-                if (result.error) {
-                    alert(result.error.message);
-                }
-            })
-            .catch(function(error) {
-                console.error('Error al crear la sesión de pago:', error);
-            });
-        } else {
-            document.querySelector('.billing-form').submit();
-        }
-    });
+		if (selectedPaymentMethod === 'Tarjeta') {
+			var total = parseFloat(document.getElementById('total').getAttribute('data-total'));
 
-
+			fetch('create_checkout_session.php', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					total: total
+				})
+			})
+			.then(function(response) {
+				return response.json();
+			})
+			.then(function(session) {
+				return stripe.redirectToCheckout({ sessionId: session.id });
+			})
+			.then(function(result) {
+				if (result.error) {
+					alert(result.error.message);
+				}
+			})
+			.catch(function(error) {
+				console.error('Error al crear la sesión de pago:', error);
+			});
+		} else {
+			document.querySelector('.billing-form').submit();
+		}
+	});
 	
   </script>
   </body>

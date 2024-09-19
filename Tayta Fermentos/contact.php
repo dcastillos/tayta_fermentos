@@ -35,99 +35,95 @@
 		</div>
 	</section>
 	
-	
-	
-
-    
-		<section class="ftco-section bg-light">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-12">
-                <div class="wrapper px-md-4">
-                    <div class="row mb-5">
-                        <div class="col-md-4">
-                            <div class="dbox w-100 text-center">
-                                <div class="icon d-flex align-items-center justify-content-center">
-                                    <span class="fa fa-map-marker"></span>
-                                </div>
-                                <div class="text">
-                                    <p><span>Dirección:</span> Calle las campanillas Mza J1 Lote 1 Urb. Casuarinas, Santiago de Surco</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="dbox w-100 text-center">
-                                <div class="icon d-flex align-items-center justify-content-center">
-                                    <span class="fa fa-phone"></span>
-                                </div>
-                                <div class="text">
-                                    <p><span>Celular:</span> <a href="tel://968204147">+51 968 204 147</a></p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="dbox w-100 text-center">
-                                <div class="icon d-flex align-items-center justify-content-center">
-                                    <span class="fa fa-paper-plane"></span>
-                                </div>
-                                <div class="text">
-                                    <p><span>Email:</span> <a href="mailto:contacto@taytafermentos.com.pe">contacto@taytafermentos.com.pe</a></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row no-gutters">
-                        <!-- Formulario a la izquierda -->
-                        <div class="col-md-7 order-md-first d-flex align-items-stretch">
-                            <div class="contact-wrap w-100 p-md-5 p-4">
-                                <h5 class="mb-4">Envíanos tus consultas y/o sugerencias, estaremos encantados de poder atenderte.</h5>
-                                <form method="POST" id="contactForm" name="contactForm" class="contactForm">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="label" for="name">Nombres</label>
-                                                <input type="text" class="form-control" name="name" id="name" placeholder="Nombres">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="label" for="email">Correo electrónico</label>
-                                                <input type="email" class="form-control" name="email" id="email" placeholder="Correo">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label class="label" for="subject">Asunto</label>
-                                                <input type="text" class="form-control" name="subject" id="subject" placeholder="Asunto">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label class="label" for="message">Mensaje</label>
-                                                <textarea name="message" class="form-control" id="message" cols="30" rows="5" placeholder="Mensaje"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <input type="submit" value="Enviar Mensaje" class="btn btn-primary">
-                                                <div class="submitting"></div>
-                                            </div>
-                                        </div>
+    <section class="ftco-section bg-light">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="wrapper px-md-4">
+                        <div class="row mb-5">
+                            <div class="col-md-4">
+                                <div class="dbox w-100 text-center">
+                                    <div class="icon d-flex align-items-center justify-content-center">
+                                        <span class="fa fa-map-marker"></span>
                                     </div>
-                                </form>
+                                    <div class="text">
+                                        <p><span>Dirección:</span> Calle las campanillas Mza J1 Lote 1 Urb. Casuarinas, Santiago de Surco</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="dbox w-100 text-center">
+                                    <div class="icon d-flex align-items-center justify-content-center">
+                                        <span class="fa fa-phone"></span>
+                                    </div>
+                                    <div class="text">
+                                        <p><span>Celular:</span> <a href="tel://968204147">+51 968 204 147</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="dbox w-100 text-center">
+                                    <div class="icon d-flex align-items-center justify-content-center">
+                                        <span class="fa fa-paper-plane"></span>
+                                    </div>
+                                    <div class="text">
+                                        <p><span>Email:</span> <a href="mailto:contacto@taytafermentos.com.pe">contacto@taytafermentos.com.pe</a></p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        <div class="row no-gutters">
+                            <!-- Formulario a la izquierda -->
+                            <div class="col-md-7 order-md-first d-flex align-items-stretch">
+                                <div class="contact-wrap w-100 p-md-5 p-4">
+                                    <h5 class="mb-4">Envíanos tus consultas y/o sugerencias, estaremos encantados de poder atenderte.</h5>
+                                    <form method="POST" id="contactForm" name="contactForm" class="contactForm">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="label" for="name">Nombres</label>
+                                                    <input type="text" class="form-control" name="name" id="name" placeholder="Nombres">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="label" for="email">Correo electrónico</label>
+                                                    <input type="email" class="form-control" name="email" id="email" placeholder="Correo">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="label" for="subject">Asunto</label>
+                                                    <input type="text" class="form-control" name="subject" id="subject" placeholder="Asunto">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="label" for="message">Mensaje</label>
+                                                    <textarea name="message" class="form-control" id="message" cols="30" rows="5" placeholder="Mensaje"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <input type="submit" value="Enviar Mensaje" class="btn btn-primary">
+                                                    <div class="submitting"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
 
-                        <!-- Mapa a la derecha -->
-                        <div class="col-md-5 d-flex align-items-stretch">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3900.7343059277814!2d-76.97357582418374!3d-12.130322843463732!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105b878df4a9719%3A0xe910cbbacfdd24e0!2sC.%20Las%20Campanillas%2C%20Santiago%20de%20Surco%2015023!5e0!3m2!1ses-419!2spe!4v1722892945506!5m2!1ses-419!2spe" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            <!-- Mapa a la derecha -->
+                            <div class="col-md-5 d-flex align-items-stretch">
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3900.7343059277814!2d-76.97357582418374!3d-12.130322843463732!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105b878df4a9719%3A0xe910cbbacfdd24e0!2sC.%20Las%20Campanillas%2C%20Santiago%20de%20Surco%2015023!5e0!3m2!1ses-419!2spe!4v1722892945506!5m2!1ses-419!2spe" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
 
 		<a href="https://wa.me/1234567890?text=hello+123" target=”_blank” class="whatsapp-btn">

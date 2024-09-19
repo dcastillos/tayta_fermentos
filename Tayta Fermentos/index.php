@@ -45,7 +45,7 @@ $result = $conn->query($query);
 					<img src="images/IMG_6314(3).png" class="d-block w-100" alt="Primera">
 				</div>
 				<div class="carousel-item">
-					<img src="images/WhatsApp Image 2023-05-22 at 7.47.24 AM (1).jpeg" class="d-block w-100" alt="Segunda">
+					<img src="images/imagen_banner_ideal.jpeg" class="d-block w-100" alt="Segunda">
 				</div>
 				<div class="carousel-item">
 					<img src="images/DSC01077.jpg" class="d-block w-100" alt="Tercero">

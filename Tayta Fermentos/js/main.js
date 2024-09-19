@@ -269,14 +269,18 @@ $(document).ready(function() {
 
         if (tipoCompra === 'retiro') {
             $('#campos_direccion').hide();
-            $('#departamento, #provincia, #distrito, [name="streetaddress"]').prop('required', false);
+            $('#departamento, #provincia, #distrito, [name="streetaddress"], [name="streetreference"]').prop('required', false).val('');
             $('#costo_delivery').text('S/ 0.00');
         } else {
             $('#campos_direccion').show();
             $('#departamento, #provincia, #distrito, [name="streetaddress"]').prop('required', true);
-            updateDeliveryCost();
+            updateDeliveryCost(); 
         }
         updateTotal(); 
+    });
+
+    $('#distrito').on('change', function() {
+        updateDeliveryCost();
     });
 
     function updateDeliveryCost() {
@@ -292,27 +296,51 @@ $(document).ready(function() {
                 },
                 error: function() {
                     alert('Error al calcular el costo de delivery');
+                    $('#costo_delivery').text('S/ 0.00');
+                    updateTotal(); 
                 }
             });
         } else {
             $('#costo_delivery').text('S/ 0.00');
-            updateTotal();
+            updateTotal(); 
         }
     }
 
     function updateTotal() {
         var subtotal = parseFloat($('#subtotal').data('subtotal'));
-        var delivery = parseFloat($('#costo_delivery').text().replace('S/ ', ''));
-        var descuento = parseFloat($('#descuento').text().replace('S/ ', ''));
+        var delivery = parseFloat($('#costo_delivery').text().replace('S/ ', '')) || 0;
+        var descuento = parseFloat($('#descuento').text().replace('S/ ', '')) || 0;
         var total = subtotal + delivery - descuento;
         $('#total').text('S/ ' + total.toFixed(2));
+		$('#total').attr('data-total', total);
         $('input[name="total"]').val(total); 
     }
 
-    // Inicialmente esconder los campos si "Retiro en tienda" es seleccionado por defecto
     if ($('#tipo_compra').val() === 'retiro') {
         $('#campos_direccion').hide();
-        $('#departamento, #provincia, #distrito, [name="streetaddress"]').prop('required', false);
+        $('#departamento, #provincia, #distrito, [name="streetaddress"], [name="streetreference"]').prop('required', false).val('');
         $('#costo_delivery').text('S/ 0.00');
     }
+});
+
+// Funcióon de pagos con Yape
+document.addEventListener('DOMContentLoaded', function() {
+    const yapeOption = document.getElementById('yapeOption');
+    const yapeSection = document.getElementById('yapeSection');
+
+    yapeOption.addEventListener('change', function() {
+        if (this.checked) {
+            yapeSection.style.display = 'block';
+        }
+    });
+
+    // Ocultar la sección si otro método es seleccionado
+    const otherOptions = document.querySelectorAll('input[name="optradio"]');
+    otherOptions.forEach(option => {
+        option.addEventListener('change', function() {
+            if (this.value !== 'Yape') {
+                yapeSection.style.display = 'none';
+            }
+        });
+    });
 });
