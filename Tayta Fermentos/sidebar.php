@@ -21,7 +21,7 @@ $result_categorias = $conn->query($query_categorias);
     </div>
 </div>
 
-
+<!--
 <div class="sidebar-box ftco-animate">
     <h3>Blog</h3>
     <div class="block-21 mb-4 d-flex">
@@ -55,3 +55,4 @@ $result_categorias = $conn->query($query_categorias);
         </div>
     </div>
 </div>
+-->

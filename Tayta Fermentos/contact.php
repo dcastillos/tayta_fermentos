@@ -76,7 +76,7 @@
                             <!-- Formulario a la izquierda -->
                             <div class="col-md-7 order-md-first d-flex align-items-stretch">
                                 <div class="contact-wrap w-100 p-md-5 p-4">
-                                    <h5 class="mb-4">Envíanos tus consultas y/o sugerencias, estaremos encantados de poder atenderte.</h5>
+                                    <h5 class="mb-4">Nos encantaría escucharte. Si tienes consultas o sugerencias, no dudes en contactarnos; estaremos felices de ayudarte.</h5>
                                     <form method="POST" id="contactForm" name="contactForm" class="contactForm">
                                         <div class="row">
                                             <div class="col-md-6">

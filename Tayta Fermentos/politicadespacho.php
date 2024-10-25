@@ -36,38 +36,20 @@
             <div class="col-md-10 mx-auto">
                 <!-- Política 1 -->
                 <div class="mb-4">
-                    <p class="font-weight-bold">1.- Áreas de cobertura</p>
-                    <p>Actualmente realizamos despachos a todo el territorio nacional. Si te encuentras en una zona de difícil acceso, es posible que el tiempo de entrega sea mayor. Si tienes dudas sobre la cobertura en tu área, contáctanos antes de realizar tu compra.</p>
+                    <p class="font-weight-bold">Tiempos de entrega</p>
+                    <p>El tiempo de entrega regular para Lima es de hasta 48 horas y para provincias dependerá de la métrica de tiempos de la transportadora, sin incluir domingos ni feriados. Los tiempos para provincias pueden variar dependiendo de la zona de reparto.</p>
                 </div>
 
                 <!-- Política 2 -->
                 <div class="mb-4">
-                    <p class="font-weight-bold">2.- Tiempos de entrega</p>
-                    <p>El tiempo de entrega estándar es de 3 a 7 días hábiles para las ciudades principales. Para zonas rurales o alejadas, el tiempo de entrega puede extenderse hasta 10 días hábiles. Te enviaremos un correo con la confirmación y los detalles de envío una vez tu pedido haya sido procesado.</p>
+                    <p class="font-weight-bold">Costo de envío</p>
+                    <p>Los costos varían según el volumen de la compra, las distancias y el método de envío. Todo será acordado al momento de la compra.</p>
                 </div>
 
                 <!-- Política 3 -->
                 <div class="mb-4">
-                    <p class="font-weight-bold">3.- Costos de envío</p>
-                    <p>Los costos de envío varían según la ubicación y el peso del paquete. En compras mayores a S/150, ofrecemos envío gratuito en todo el país. Puedes consultar los costos de envío exactos al momento de realizar tu compra, en la sección de "Costos de envío".</p>
-                </div>
-
-                <!-- Política 4 -->
-                <div class="mb-4">
-                    <p class="font-weight-bold">4.- Rastreo de tu pedido</p>
-                    <p>Una vez que tu pedido sea enviado, recibirás un número de seguimiento para que puedas monitorear el estado de tu envío en tiempo real. Puedes ingresar este número en la página de la empresa de transporte para verificar el estado actual de tu pedido.</p>
-                </div>
-
-                <!-- Política 5 -->
-                <div class="mb-4">
-                    <p class="font-weight-bold">5.- Reprogramación de despacho</p>
-                    <p>Si no estás disponible en la fecha de entrega programada, puedes contactarnos para reprogramar el despacho. Te sugerimos hacerlo con al menos 24 horas de anticipación para evitar inconvenientes.</p>
-                </div>
-
-                <!-- Política 6 -->
-                <div class="mb-4">
-                    <p class="font-weight-bold">6.- Política de devoluciones por error de despacho</p>
-                    <p>En caso de que recibas un producto diferente al que pediste, debes informarnos dentro de las primeras 48 horas posteriores a la entrega. Nos haremos cargo de recoger el producto equivocado y entregarte el correcto sin costo adicional.</p>
+                    <p class="font-weight-bold">Pedidos enviados a Lima y Provincia</p>
+                    <p>Los pedidos que tienen como destino Lima y provincias, tendrán un máximo de espera de 10 minutos por parte del courier; de no contactar con el cliente, su compra será retornada a nuestro almacén. Asimismo, si el cliente desea reprogramar el envío, tendrá un tiempo máximo de 3 días hábiles para solicitarlo. Dicha reprogramación tendrá un costo adicional de delivery, según corresponda el destino.</p>
                 </div>
             </div>
         </div>

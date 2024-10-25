@@ -45,7 +45,7 @@ $result = $conn->query($query);
 					<img src="images/IMG_6314(3).png" class="d-block w-100" alt="Primera">
 				</div>
 				<div class="carousel-item">
-					<img src="images/imagen_banner_ideal.jpeg" class="d-block w-100" alt="Segunda">
+					<img src="images/foto_testimonio.jpg" class="d-block w-100" alt="Segunda">
 				</div>
 				<div class="carousel-item">
 					<img src="images/DSC01077.jpg" class="d-block w-100" alt="Tercero">
@@ -76,9 +76,8 @@ $result = $conn->query($query);
     						<span class="flaticon-support"></span>
     					</div>
     					<div class="text">
-    						<h2>Seminarios</h2>
-    						<p>Nuestros seminarios están diseñados para ofrecerte un aprendizaje intensivo y especializado en un ------------. Impartidos por expertos en la materia, estos eventos te proporcionan conocimientos prácticos y actualizados, permitiéndote mejorar tus habilidades y mantenerse a la vanguardia en tu campo.
-							</p>
+    						<h2>DESCUBRE NUESTRO TALLERES</h2>
+    						<p>En nuestros talleres, te invitamos a descubrir el fascinante mundo de los alimentos PROBIÓTICOS. Aprende de manera práctica cómo elaborarlos utilizando ingredientes naturales y técnicas simples y muy eficientes. Nuestro chef experto Riders Rosini te guiará paso a paso en cada proceso de fermentación, brindándote las herramientas para crear alimentos vivos que mejoran tu salud intestinal y tu bienestar general.</p>
     					</div>
     				</div>
     			</div>
@@ -88,8 +87,8 @@ $result = $conn->query($query);
     						<span class="flaticon-cashback"></span>
     					</div>
     					<div class="text">
-    						<h2>Membresia</h2>
-    						<p>Únete a nuestra Membresía de Productos Naturales y disfruta de una experiencia exclusiva diseñada para los amantes de la salud y el bienestar. Como miembro, recibirás cada mes una selección de productos naturales cuidadosamente seleccionados.</p>
+    						<h2>TAYTA SUSCRIPCIÓN</h2>
+    						<p>Con nuestra suscripción, no solo ahorras tiempo y dinero, sino que te aseguras de tener siempre a la mano alimentos ricos en probióticos que fortalecen tu sistema inmunológico y mejoran tu digestión. En una vida ajetreada y llena de responsabilidades, déjanos ser parte de tu estilo de vida saludable y llevaremos sus alimentos justo cuando tu ya se había olvidado reponer tus kombuchas en la refri!</p>
     					</div>
     				</div>
     			</div>
@@ -99,8 +98,8 @@ $result = $conn->query($query);
     						<span class="flaticon-free-delivery"></span>
     					</div>
     					<div class="text">
-    						<h2>Delivery</h2>
-    						<p>Con nuestro Delivery de Productos , llevamos el poder de la naturaleza directamente a tu puerta. Disfruta de una amplia variedad de productos naturales, todo sin salir de casa.</p>
+    						<h2>DELIVERY</h2>
+    						<p>Pide tus productos probióticos favoritos, como kombucha, kimchi, chucrut y ginger beer, y muchos otros más. Recíbelos directamente en la comodidad de tu hogar. Nos aseguramos de que cada entrega mantenga la frescura y calidad que nos caracteriza, permitiéndote disfrutar de los beneficios de los alimentos fermentados sin salir de casa.</p>
     					</div>
     				</div>
     			</div>
@@ -168,10 +167,10 @@ $result = $conn->query($query);
 					<div class="col-md-6 wrap-about pl-md-5 ftco-animate py-5">
 	          <div class="heading-section">
 	          	<span class="subheading">Desde 2014 </span>
-	            <h2 class="mb-4">Seminarios</h2>
-
-	            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam impedit omnis non necessitatibus ipsum natus unde debitis reiciendis ex, laudantium, minima eveniet dolore molestias quasi iste maxime et dignissimos! Deleniti. officiis! Et.</p>
-	            <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero, ex cupiditate minus dolorum cum adipisci fugiat earum fugit, excepturi unde beatae fuga quam praesentium laboriosam qui ab labore asperiores deserunt.Lorem ipsum, dolor sit amet consectetur adipisicing elit. Odit non assumenda dolorem cupiditate dignissimos excepturi molestiae ea sunt ullam dolor earum corporis vitae obcaecati, consequuntur, amet dicta maxime quaerat eum.</p>
+	            <h2 class="mb-4">Talleres</h2>
+	            <p>Tayta Fermentos tiene un gran propósito: Compartir bienestar.</p>
+	            <p>Nuestros talleres son desarrollados para un público diverso, desde los que están iniciando al concepto de fermentación, hasta los más experimentados.</p>
+				<p>Nuestro chef Riders Rosini, fundador de la marca, con más de 20 años de experiencia en los mejores restaurantes del mundo, comanda los talleres donde el conversatorio siempre va por una alimentación saludable, ayurveda, sostenibilidad y  técnicas de fermentación para la gran variedad de alimentos y bebidas fermentados. Con Riders Rosini descubrirás cómo preparar alimentos vivos como kombucha, chucrut, kimchi, masas madre, panes y mucho más, utilizando técnicas simples y naturales. Nuestros talleres no solo te enseñarán a elaborar alimentos probióticos en casa, sino que también te sumergirá en un estilo de vida más saludable y conectado con la naturaleza. ¡Únete a nosotros y empieza a fermentar tu bienestar!</p>
 	            <p class="year">
 	            	<strong class="number" data-number="10">0</strong>
 		            <span>Años de experiencia</span>
@@ -182,17 +181,15 @@ $result = $conn->query($query);
 				</div>
 			</div>
 		</section>
+		<br>
+		<br>
 
-		
-
-		
-  
     <section class="ftco-section testimony-section img" style="background-image: url(images/fondo_testimonio.jpg);">
     	<div class="overlay"></div>
       <div class="container">
         <div class="row justify-content-center mb-5">
           <div class="col-md-7 text-center heading-section heading-section-white ftco-animate">
-          	<span class="subheading">Testimonios</span>
+          	<span class="subheading"></span>
             <h2 class="mb-3">Clientes felices</h2>
           </div>
         </div>
@@ -203,12 +200,10 @@ $result = $conn->query($query);
                 <div class="testimony-wrap py-4">
                 	<div class="icon d-flex align-items-center justify-content-center"><span class="fa fa-quote-left"></div>
                   <div class="text">
-                    <p class="mb-4">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+                    <p class="mb-4">Los productos naturales han transformado mi alimentación. Son frescos y de excelente calidad. ¡Los recomiendo totalmente a mis pacientes!</p>
                     <div class="d-flex align-items-center">
-                    	<div class="user-img" style="background-image: url(images/person_1.jpg)"></div>
                     	<div class="pl-3">
-		                    <p class="name">Roger Scott</p>
-		                    <span class="position">Marketing Manager</span>
+		                    <p class="name">Diego González</p>
 		                  </div>
 	                  </div>
                   </div>
@@ -218,12 +213,10 @@ $result = $conn->query($query);
                 <div class="testimony-wrap py-4">
                 	<div class="icon d-flex align-items-center justify-content-center"><span class="fa fa-quote-left"></div>
                   <div class="text">
-                    <p class="mb-4">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+                    <p class="mb-4">La variedad de ingredientes naturales me ha inspirado en la cocina. Mis platos nunca habían sabido tan bien. ¡Una experiencia increíble!</p>
                     <div class="d-flex align-items-center">
-                    	<div class="user-img" style="background-image: url(images/person_2.jpg)"></div>
                     	<div class="pl-3">
-		                    <p class="name">Roger Scott</p>
-		                    <span class="position">Marketing Manager</span>
+		                    <p class="name">Carlos Rodríguez</p>
 		                  </div>
 	                  </div>
                   </div>
@@ -233,12 +226,10 @@ $result = $conn->query($query);
                 <div class="testimony-wrap py-4">
                 	<div class="icon d-flex align-items-center justify-content-center"><span class="fa fa-quote-left"></div>
                   <div class="text">
-                    <p class="mb-4">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+                    <p class="mb-4">Desde que uso estos productos, mi energía ha aumentado. Son auténticos y nutritivos. ¡Definitivamente, seguiré comprando más!</p>
                     <div class="d-flex align-items-center">
-                    	<div class="user-img" style="background-image: url(images/person_3.jpg)"></div>
                     	<div class="pl-3">
-		                    <p class="name">Roger Scott</p>
-		                    <span class="position">Marketing Manager</span>
+		                    <p class="name">Luis Herrera</p>
 		                  </div>
 	                  </div>
                   </div>
@@ -248,12 +239,10 @@ $result = $conn->query($query);
                 <div class="testimony-wrap py-4">
                 	<div class="icon d-flex align-items-center justify-content-center"><span class="fa fa-quote-left"></div>
                   <div class="text">
-                    <p class="mb-4">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+                    <p class="mb-4">Los productos son excepcionales. He notado un gran cambio en mi salud y bienestar. ¡Un gran hallazgo para mi vida diaria!</p>
                     <div class="d-flex align-items-center">
-                    	<div class="user-img" style="background-image: url(images/person_1.jpg)"></div>
                     	<div class="pl-3">
-		                    <p class="name">Roger Scott</p>
-		                    <span class="position">Marketing Manager</span>
+		                    <p class="name">Javier Torres</p>
 		                  </div>
 	                  </div>
                   </div>
@@ -263,12 +252,10 @@ $result = $conn->query($query);
                 <div class="testimony-wrap py-4">
                 	<div class="icon d-flex align-items-center justify-content-center"><span class="fa fa-quote-left"></div>
                   <div class="text">
-                    <p class="mb-4">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+                    <p class="mb-4">Me encanta experimentar con los productos. Son frescos y deliciosos. ¡Perfectos para mis recetas y proyectos en la cocina!</p>
                     <div class="d-flex align-items-center">
-                    	<div class="user-img" style="background-image: url(images/person_2.jpg)"></div>
                     	<div class="pl-3">
-		                    <p class="name">Roger Scott</p>
-		                    <span class="position">Marketing Manager</span>
+		                    <p class="name">Ricardo Martínez</p>
 		                  </div>
 	                  </div>
                   </div>
