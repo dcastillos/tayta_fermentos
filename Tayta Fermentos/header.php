@@ -14,42 +14,10 @@ if (isset($_SESSION['carrito'])) {
 ?>
 
 <!-- Inicio del header -->
-<div class="wrap">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 d-flex align-items-center">
-                <p class="mb-0 phone pl-md-2">
-                    <a href="#" class="mr-2"><span class="fa fa-phone mr-1"></span> 968 204 147</a> 
-                    <a href="contact.php"><span class="fa fa-paper-plane mr-1"></span> contacto@taytafermentos.com.pe</a>
-                </p>
-            </div>
-            <div class="col-md-6 d-flex justify-content-md-end">
-                <div class="social-media mr-4">
-                    <p class="mb-0 d-flex">
-                        <a href="https://www.facebook.com/taytafermentos/" class="d-flex align-items-center justify-content-center"><span class="fa fa-facebook"><i class="sr-only">Facebook</i></span></a>
-                        <a href="https://www.instagram.com/taytafermentos/?hl=es" class="d-flex align-items-center justify-content-center"><span class="fa fa-instagram"><i class="sr-only">Instagram</i></span></a>
-                    </p>
-                </div>
-                <div class="reg">
-                    <p class="mb-0">
-                        <?php if ($usuario_nombre): ?>
-                            <span>Hola, <?php echo htmlspecialchars($usuario_nombre); ?> | </span>
-                            <a href="dashboard.php">Mi Cuenta</a> | 
-                            <a href="logout.php">Salir</a>
-                        <?php else: ?>
-                            <a href="login.php">Iniciar sesión</a>
-                        <?php endif; ?>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Navegación -->
 <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
     <div class="container">
-        <a class="navbar-brand" href="index.php"><img src="images/LogoSinFondo.png" width="200" height="80"></a>
+        <a class="navbar-brand" href="index.php"><img src="images/LogoSinFondoTayta.png" width="200" height="80"></a>
         <div class="order-lg-last btn-group">
             <button onclick="openCartSidebar()" class="btn-cart dropdown-toggle dropdown-toggle-split" style="border: none; background: none;">
                 <img src="images/carrito_final.png" alt="carrito de compras" style="width: 24px; height: 24px;">
@@ -72,6 +40,7 @@ if (isset($_SESSION['carrito'])) {
                 <li class="nav-item"><a href="cart.php" class="nav-link">Mi Carrito</a></li>
                 <li class="nav-item"><a href="blog.php" class="nav-link">Membresía</a></li>
                 <li class="nav-item"><a href="contact.php" class="nav-link">Contactos</a></li>
+                <li class="nav-item"><a href="login.php" class="nav-link"><i class="fa-solid fa-user"></i></a></li>
             </ul>
         </div>
     </div>

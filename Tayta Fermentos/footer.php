@@ -4,18 +4,18 @@
 		<div class="row mb-5">
 			<div class="col-sm-12 col-md">
 				<div class="ftco-footer-widget mb-4">
-					<h2 class="ftco-heading-2 logo"><a href="#">EMPRESA</a></h2>
+					<h2 class="ftco-heading-2 logo"><a href="#">NUESTRAS REDES SOCIALES</a></h2>
 					<p>Nutre tu cuerpo, vive mejor. Descubre nuestros productos 100% saludables.</p>
 					<ul class="ftco-footer-social list-unstyled mt-2">
-						<li class="ftco-animate"><a href="https://www.facebook.com/taytafermentos/"><span class="fa fa-facebook"></span></a></li>
-						<li class="ftco-animate"><a href="https://www.instagram.com/taytafermentos/?hl=es"><span class="fa fa-instagram"></span></a></li>
+						<li class="ftco-animate"><a href="https://www.facebook.com/taytafermentos/"><span class="fa fa-facebook text-dark"></span></a></li>
+						<li class="ftco-animate"><a href="https://www.instagram.com/taytafermentos/?hl=es"><span class="fa fa-instagram text-dark"></span></a></li>
 					</ul>
 				</div>
 			</div>
 
 			<div class="col-sm-12 col-md">
 				<div class="ftco-footer-widget mb-4">
-					<h2 class="ftco-heading-2">Preguntas rápidas</h2>
+					<h2 class="ftco-heading-2">INFORMACION</h2>
 					<ul class="list-unstyled">
 						<li><a href="faq.php"><span class="fa fa-chevron-right mr-2"></span>Preguntas frecuentes</a></li>
 						<li><a href="promocion.php"><span class="fa fa-chevron-right mr-2"></span>Promociones y campañas</a></li>
@@ -52,7 +52,7 @@
 						</p>
 						<div class="d-flex justify-content-center align-items-center">
 							<img src="images/visa_sin fondo.png" alt="Visa" style="width: 40px; margin-right: 10px;">
-							<img src="images/33333-cutout.png" alt="Master" style="width: 40px; margin-right: 10px;">
+							<img src="images/33333-cutout.png" alt="Master" style="width: 40px;">
 						</div>
 						<p class="mb-0" style="color: rgba(255,255,255,.5);">
 							Desarrollado por DAYELU
